@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1516498633255.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "538430811",
+    "id" : "E9F3F5C2",
+    "lastKnownWriteTime" : 1516673008,
+    "last_content_update" : 1516673024759,
+    "path" : "~/Documents/GitHub/m6ALogisticModel/R/predictors.annot.R",
+    "project_path" : "R/predictors.annot.R",
+    "properties" : {
+        "cursorPosition" : "101,0",
+        "scrollLine" : "92"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

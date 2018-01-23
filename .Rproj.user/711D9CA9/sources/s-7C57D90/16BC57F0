@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1516347491223.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "16BC57F0",
+    "lastKnownWriteTime" : 1516688997,
+    "last_content_update" : 1516688997641,
+    "path" : "~/Documents/GitHub/m6ALogisticModel/Package meta.R",
+    "project_path" : "Package meta.R",
+    "properties" : {
+        "cursorPosition" : "325,0",
+        "scrollLine" : "308"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

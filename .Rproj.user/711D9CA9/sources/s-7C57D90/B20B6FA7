@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1516672728822.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B20B6FA7",
+    "lastKnownWriteTime" : 1516697101,
+    "last_content_update" : 1516697101344,
+    "path" : "~/Documents/GitHub/m6ALogisticModel/R/logistic.modeling.R",
+    "project_path" : "R/logistic.modeling.R",
+    "properties" : {
+        "cursorPosition" : "171,29",
+        "scrollLine" : "126",
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

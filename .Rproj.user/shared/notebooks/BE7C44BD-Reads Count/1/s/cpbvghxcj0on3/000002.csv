@@ -1,0 +1,4 @@
+"0","SRR_RUN_human_SE <- as.character( SRR_RUN )[coldata_TREWcons$Lib == ""Single"" & grepl(""human"",coldata_TREWcons$Experiment)]
+"
+"2","错误: 找不到对象'SRR_RUN'
+"

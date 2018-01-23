@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1516606664643.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2801332153",
+    "id" : "7CD1B171",
+    "lastKnownWriteTime" : 1516607478,
+    "last_content_update" : 1516607478355,
+    "path" : "~/Documents/GitHub/m6ALogisticModel/R/Properties_map.R",
+    "project_path" : "R/Properties_map.R",
+    "properties" : {
+        "cursorPosition" : "11,86",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

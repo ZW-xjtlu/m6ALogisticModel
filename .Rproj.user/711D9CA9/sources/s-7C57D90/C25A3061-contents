@@ -1,0 +1,3 @@
+Install macOS High Sierra 10.13.2 .dmg
+
+sudo /Applications/Install\ macOS\ High\ Sierra.app/Contents/Resources/createinstallmedia --volume /Volumes/New\ Volume --applicationpath /Applications/Install\ macOS\ High\ Sierra.app --nointeraction
