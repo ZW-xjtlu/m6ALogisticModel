@@ -346,3 +346,10 @@ SE_features_added <- predictors.annot(
 )
 
 
+group_list_default = list(
+  miRNA_RBP = Feature_lst_hg19
+)
+
+#Try to demonstrate predict evolutionary conservation with other features.
+
+# Case study to demonstrate the usage of this tool, classify the differences between evolutionary conserved and evolutionary unconserved (by FC and PC) m6A sites reported by RMBase2.

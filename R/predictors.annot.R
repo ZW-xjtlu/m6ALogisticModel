@@ -129,39 +129,32 @@
 #' library(fitCons.UCSC.hg19)
 #' library(phastCons100way.UCSC.hg19)
 #'
-#' gr <- GRanges(seqnames =  'chr3',
-#' IRanges(100:200, width=1),
-#' strand='-')
 #'
-#' SE <- SummarizedExperiment()
-#' rowRanges(SE) = gr
-#'
-#' Feature_lst_hg19 = list(
-#' HNRNPC_eCLIP = readRDS("eCLIP_HNRNPC.rds"),
-#' YTHDC1_TREW = readRDS("YTHDC1_TREW_gr.rds"),
-#' YTHDF1_TREW = readRDS("YTHDF1_TREW_gr.rds"),
-#' YTHDF2_TREW = readRDS("YTHDF2_TREW_gr.rds"),
-#' miR_targeted_genes = readRDS("miR_targeted_genes_grl.rds"),
-#' miRanda = readRDS("miRanda_hg19_gr.rds"),
-#' TargetScan = readRDS("TargetScan_hg19_gr.rds"),
-#' Verified_miRtargets = readRDS("verified_targets.rds")
+#' Feature_List_hg19 = list(
+#' HNRNPC_eCLIP = eCLIP_HNRNPC_gr,
+#' YTHDC1_TREW = YTHDC1_TREW_gr,
+#' YTHDF1_TREW = YTHDF1_TREW_gr,
+#' YTHDF2_TREW = YTHDF2_TREW_gr,
+#' miR_targeted_genes = miR_targeted_genes_grl,
+#' #miRanda = miRanda_hg19_gr,
+#' TargetScan = TargetScan_hg19_gr,
+#' Verified_miRtargets = verified_targets_gr
 #' )
 #'
-#' SE_features_added <- predictors.annot(se = SE,
+#' SE_features_added <- predictors.annot(se = SE_example,
 #'                        txdb = TxDb.Hsapiens.UCSC.hg19.knownGene,
 #'                          bsgnm = Hsapiens,
 #'                            fc = fitCons.UCSC.hg19,
 #'                            pc = phastCons100way.UCSC.hg19,
 #'                          struct_hybridize = Struc_hg19,
-#'                        feature_lst = Feature_lst_hg19,
-#'                      HK_genes_list = HK_hg19)
+#'                        feature_lst = Feature_List_hg19,
+#'                      HK_genes_list = HK_hg19_eids)
 #'
 #' mcols(SE_features_added) ###Check the generated feature matrix.
 #'
 #' @seealso \code{\link{logistic.modeling}} to perform model selection, statistics calculation, and visualization across multiple samples.
 #'
 #' @import BSgenome
-#' @import dplyr
 #' @import GenomicFeatures
 #' @import GenomicRanges
 #' @import SummarizedExperiment
@@ -179,16 +172,17 @@ predictors.annot <- function(se,
                              HK_genes_list = NULL
                              ) {
 row_gr = rowRanges(se)
-genes_txdb <- genes(txdb)
+genes_txdb <- GenomicFeatures::genes(txdb)
 exbytx_txdb <- exonsBy(txdb,by = "tx")
 exbg_txdb <- exonsBy(txdb,by = "gene")
 exs_txdb <- exons(txdb)
 Stop_codons <- resize( cds(txdb) , 1, fix = "end" )
 Start_codons <- resize( cds(txdb) , 1, fix = "start" )
-TSS <- transcripts(txdb) %>% resize(.,1,fix = "start")
+TSS <- resize(transcripts(txdb),1,fix = "start")
 A_idx <- vcountPattern("A", DNAStringSet( Views(Hsapiens, TSS))) > 0
 UTR3 <- threeUTRsByTranscript(txdb)
 UTR5 <- fiveUTRsByTranscript(txdb)
+CDS <- cdsBy(txdb,by = "tx")
 
 Feature_matrix = data.frame(UTR5 = row_gr%over%UTR5)
 
@@ -202,7 +196,7 @@ Feature_matrix$UTR3 <- row_gr%over%UTR3
 
 i  = Speak("3'utr",i)
 
-Feature_matrix$CDS <- row_gr%over%cds(txdb)
+Feature_matrix$CDS <- row_gr%over%CDS
 
 i  = Speak("cds",i)
 
@@ -236,8 +230,8 @@ i  = Speak("exon",i)
 exbytx_unlist <- unlist( exbytx_txdb )
 ex_ranks <- exbytx_unlist$exon_rank
 names(ex_ranks) = 1:length(ex_ranks)
-Idx_last_exon <-  tapply( ex_ranks , names(exbytx_unlist), function(x) names(x)[which.max(x)]) %>% as.numeric
-Last_exons_50bp <- exbytx_unlist[Idx_last_exon] %>% resize(.,50,fix = "start")
+Idx_last_exon <- as.numeric( tapply( ex_ranks , names(exbytx_unlist), function(x) names(x)[which.max(x)]) )
+Last_exons_50bp <-  resize( exbytx_unlist[Idx_last_exon],50,fix = "start")
 Feature_matrix$Last_exons_50bp <- row_gr%over%Last_exons_50bp
 
 i  = Speak("Start 50bp of the last exon",i)
@@ -262,7 +256,7 @@ i  = Speak("relative positioning on 3'utr",i)
 
  # - Pos_CDS: Relative positioning on Coding Sequence.
 
-Feature_matrix$Pos_CDS <- Relative_Pos_map(row_gr,cdsBy(txdb,by = "tx"),0)
+Feature_matrix$Pos_CDS <- Relative_Pos_map(row_gr,CDS,0)
 
 i  = Speak("relative positioning on cds",i)
 
@@ -280,9 +274,35 @@ i  = Speak("relative positioning on exon",i)
  #
  # - long_UTR3: Long 3'UTR (length > 400bp).
 
-long_UTR3 <- UTR3[sum(width(UTR3)) > 400]
-Feature_matrix$long_UTR3 <- row_gr%over%long_UTR3
-i  = Speak("Long 3'UTR length > 400bp ",i)
+Feature_matrix$length_UTR3 <- Properties_map(query_gr = row_gr,
+                                                feature_gr = UTR3,
+                                                feature_properties = sum(width(UTR3)),
+                                                no_map_val = NA,
+                                                normalize = T)
+
+Feature_matrix$length_UTR3[is.na(Feature_matrix$length_UTR3)] = 0
+
+i  = Speak("3'UTR length (z scores) ",i)
+
+Feature_matrix$length_UTR5 <- Properties_map(query_gr = row_gr,
+                                             feature_gr = UTR5,
+                                             feature_properties = sum(width(UTR5)),
+                                             no_map_val = NA,
+                                             normalize = T)
+
+Feature_matrix$length_UTR5[is.na(Feature_matrix$length_UTR5)] = 0
+
+i  = Speak("5'UTR length (z scores) ",i)
+
+Feature_matrix$length_CDS <- Properties_map(query_gr = row_gr,
+                                             feature_gr = CDS,
+                                             feature_properties = sum(width(CDS)),
+                                             no_map_val = NA,
+                                             normalize = T)
+
+Feature_matrix$length_CDS[is.na(Feature_matrix$length_CDS)] = 0
+
+i  = Speak("CDS length (z scores) ",i)
 
  #
  # - long_exons: Long exon (length > 400bp).
@@ -295,12 +315,13 @@ i  = Speak("Long exon (length > 400bp)",i)
  # - Gene_length_ex: standardized gene length of exonic regions (z score).
  #
 
-Feature_matrix$Gene_length_ex <- Properties_map(query_gr = row_gr,
+Feature_matrix$length_gene_ex <- Properties_map(query_gr = row_gr,
                                                  feature_gr = exbg_txdb,
                                                  feature_properties = sum(width(exbg_txdb)),
-                                                 no_map_val = 0,
+                                                 no_map_val = NA,
                                                  normalize = T)
 
+Feature_matrix$length_gene_ex[is.na(Feature_matrix$length_gene_ex)] = 0
 
 i  = Speak("gene length-exons (z-score)",i)
 
@@ -309,11 +330,13 @@ i  = Speak("gene length-exons (z-score)",i)
  #
  #
 
-Feature_matrix$Gene_length_full <-  Properties_map(query_gr = row_gr,
+Feature_matrix$length_gene_full <-  Properties_map(query_gr = row_gr,
                                                                 feature_gr = genes_txdb,
                                                                 feature_properties = width(genes_txdb),
-                                                     no_map_val = 0,
+                                                     no_map_val = NA,
                                                    normalize = T)
+
+Feature_matrix$length_gene_full[is.na(Feature_matrix$length_gene_full)] = 0
 
 i  = Speak("gene length full transcript (z-score)",i)
 
@@ -333,7 +356,7 @@ DSS <- DNAStringSet( Views(Hsapiens,row_gr + 2) )
 
 for (m_i in motif)  {
 Feature_matrix[[m_i]] <- is_motif(m_i,DSS,T)
-i  = Speak(paste0("Motif: ",m_i),i)
+i  = Speak(paste0("Motif --- ",m_i),i)
 }
 
 }
@@ -380,6 +403,15 @@ if(!is.null(fc)) {
   i  = Speak("fitness consequences scores 101nt >= 0.6",i)
 }
 
+
+ Feature_matrix$struct_hybridize <- row_gr%over%struct_hybridize
+
+ i  = Speak("RNA structure --- predicted hybridized region",i)
+
+ Feature_matrix$struct_loop <- row_gr%over%Infer_loop( struct_hybridize )
+
+ i  = Speak("RNA structure --- inferred loop structures between hybridized region",i)
+
  #
  #   ###6. User specified features by argument \code{feature_lst}###
  #
@@ -398,7 +430,7 @@ if(!is.null(feature_lst)) {
  # - sncRNA: small noncoding RNA (<= 200bp)
  #
 
-coding_tx <- names(cdsBy(txdb, by = "tx"))
+coding_tx <- names(CDS)
 exbytx_nc <- exbytx_txdb[!names(exbytx_txdb)%in%coding_tx]
 lnc_idx <- sum(width(exbytx_nc)) > 200
 Feature_matrix$sncRNA  <- row_gr%over%exbytx_nc[!lnc_idx]

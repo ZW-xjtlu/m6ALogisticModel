@@ -6,10 +6,14 @@ Author: Zhen Wei
 Maintainer: The package maintainer <zhen.wei10@icloud.com>
 Description: Motivation to use logistic model: the transcript features are usually confounded with each other.Example 1. TSSA and start codon.Example 2. Start of the last exon and stop codon.Example 3. Long exons and stop codons.Example 4. Long exons and long genes.Example 5. GC content, structure, and transcript start.So this package is designed to extract predictors and run logistic regression model with the commonly mentioned but confounded transcript annotations.
 License: What license is it under?
-Imports: BSgenome,
+Imports: BAS,
+    readr,
+    BSgenome,
     GenomicFeatures,
     GenomicRanges,
-    dplyr
+    SummarizedExperiment,
+    magrittr,
+    ggplot2
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1

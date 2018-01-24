@@ -18,15 +18,33 @@
 #' @param top The number of top models used for BMA related decision making, default setting is NULL (BMA over all models); see \code{\link{predict.bas}}
 #' @param save_dir The path to save the statistics of the logistic models and their diagrams, the default path is named "LogisticModel".
 #' @param sample_names_coldata Provided column names in \code{colData} for the sample labels.
+#' @param group_list Optional, a \code{list} indicating the grouping of features in the output diagrams, by default it uses \code{\link{group_list_default}}.
 #'
 #' @return
 #' A folder under the current working directory will be created, the reports and the diagrams will be saved within it.
 #'
 #' @seealso Use \code{\link{predictors.annot}} to annotate features.
 #'
-#' @example
+#' @examples
+#' library(SummarizedExperiment)
+#' library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+#' library(BSgenome.Hsapiens.UCSC.hg19)
+#' library(fitCons.UCSC.hg19)
+#' library(phastCons100way.UCSC.hg19)
 #'
-#' SE_features_added <- predictors.annot(se = se_combinded,
+#' Feature_lst_hg19 = list(
+#' HNRNPC_eCLIP = eCLIP_HNRNPC_gr,
+#' YTHDC1_TREW = YTHDC1_TREW_gr,
+#' YTHDF1_TREW = YTHDF1_TREW_gr,
+#' YTHDF2_TREW = YTHDF2_TREW_gr,
+#' miR_targeted_genes = miR_targeted_genes_grl,
+#' #miRanda = miRanda_hg19_gr,
+#' TargetScan = TargetScan_hg19_gr,
+#' Verified_miRtargets = verified_targets_gr
+#' )
+#'
+#'
+#' SE_features_added <- predictors.annot(se = SE_example,
 #'                                      txdb = TxDb.Hsapiens.UCSC.hg19.knownGene,
 #'                                      bsgnm = Hsapiens,
 #'                                      fc = fitCons.UCSC.hg19,
@@ -35,12 +53,13 @@
 #'                                      feature_lst = Feature_List_hg19,
 #'                                      HK_genes_list = HK_hg19_eids)
 #'
+#'
 #' logistic.modeling(
 #' SE_features_added,
-#' MCMC_iterations = 100000,
+#' MCMC_iterations = 50000,
 #' decision_method = "BPM",
-#' top = 50,
-#' save_dir = "LogisticModel_x"
+#' save_dir = "LogisticModel_x",
+#' sample_names_coldata = "ID"
 #' )
 #'
 #'
@@ -59,7 +78,8 @@ logistic.modeling <- function(
   decision_method = "BPM",
   top = NULL,
   save_dir = "LogisticModel",
-  sample_names_coldata = colnames(colData(se))[1]
+  sample_names_coldata = colnames(colData(se))[1],
+  group_list = group_list_default
 ){
 #Create saving directories
 if(dir.exists(save_dir)) {} else{
@@ -76,12 +96,14 @@ if(!is.null(colnames(Target_matrix))) {
   idx_sample = colnames(Target_matrix)
 } else {
   idx_sample = colData(se)[[sample_names_coldata]]
-  if(is.na(idx_sample)) stop("A index for the names of samples/coditions are required by either collumn names or first collumn of colData.")
+  if(anyNA(idx_sample)) stop("A index for the names of samples/coditions are required by either collumn names or first collumn of colData.")
 }
 
 if(any(duplicated(idx_sample))) stop("The sample index contains duplicated names.")
 
 Features = mcols( se )
+
+colnames(Target_matrix) = idx_sample
 
 for (i in idx_sample) {
 Design =  as.data.frame( cbind(Target_matrix[,i],Features)[!is.na(Target_matrix[,i]),] )
@@ -89,7 +111,7 @@ colnames(Design)[1] = "Y"
 Design$Y = Design$Y > 0
 cat(paste0("Running model selection for collumn: ",i,"...\n"))
 
-BAS_I =  bas.glm(Y ~ .,
+BAS_I =  BAS::bas.glm(Y ~ .,
                    family = binomial(link = "logit"),
                    data = Design,
                    n.models= 2^8,
@@ -145,10 +167,6 @@ write.csv(plot_df,paste0(save_dir_i,"/","Plot.csv"))
 }
 
 #Integrate the data generated to visualize them.
-for(i in idx_sample) {
-save_dir_i <- paste0(save_dir,"/",i)
-read.csv(paste0(save_dir_i,"/Plot.csv"))
-}
 
 
 #Construct Plot dataframe for meta plots
@@ -157,52 +175,115 @@ Plot_lst <- lapply(idx_sample,function(x) read.csv(paste0(save_dir,"/",x,"/Plot.
 
 names( Plot_lst ) = idx_sample
 
-Predictors <- c("Intercept" , gsub("_", " ", colnames(Features) ))
+Predictors <- c("Intercept" , colnames(Features) )
 
 PLOT_DF = data.frame(
   Predictors = rep(Predictors,length(Plot_lst)),
-  Regulators = factor( rep(names( Plot_lst ),
+  Condations = factor( rep(names( Plot_lst ),
                            each = length(Predictors)) ,
-                       levels = c("WTAP","METTL3","METTL14","KIAA1429","METTL16","ALKBH5","FTO","eraser","writer"))
+                       levels = idx_sample)
 )
 
-PLOT_DF$Group = NA
-PLOT_DF$Group[PLOT_DF$Predictors %in% c("CDS","UTR5","UTR3","Start codons","Stop codons","Last exons 50bp","m6Am")] = "Transcript region"
-PLOT_DF$Group[PLOT_DF$Predictors %in% c("Pos Tx","Pos UTR5","Pos CDS","Pos UTR3", "Pos exons")] = "Relative position"
-PLOT_DF$Group[PLOT_DF$Predictors %in% c("Gene length all","Gene length ex","long exon","long UTR3")] = "Region length"
-PLOT_DF$Group[PLOT_DF$Predictors %in% c("Struc hybridize","Struc loop")] = "Structure"
-PLOT_DF$Group[PLOT_DF$Predictors %in% c("AAACA","AAACC","AAACT","AGACA","AGACC","AGACT","GAACA","GAACC","GAACT","GGACA","GGACC","GGACT")] = "Motif"
-PLOT_DF$Group[PLOT_DF$Predictors %in% c("FC 1nt","FC 5nt","PC 1nt","PC 201nt")] = "Evolution"
-PLOT_DF$Group[PLOT_DF$Predictors %in% c("HNRNPC eCLIP","YTHDC1 TREW","YTHDF1 TREW","YTHDF2 TREW","miR targeted genes","miRanda","TargetScan","Verified miRtargets")] = "miRNA & RBP"
-PLOT_DF$Group[PLOT_DF$Predictors %in% c("lncRNA","sncRNA","Isoform num","HK genes")] = "Gene attribure"
-PLOT_DF$Group[PLOT_DF$Predictors %in% c("GC cont 101bp","GC cont genes","Intercept")] = "Batch"
+for(i in names(group_list)) {
+  PLOT_DF$Group[PLOT_DF$Predictors %in% group_list[[i]]] = i
+}
 
-PLOT_DF$Group = factor(PLOT_DF$Group, levels = c("Transcript region","Relative position","Region length","Structure","Motif","Evolution","miRNA & RBP","Gene attribure","Batch"))
+PLOT_DF$Group = factor(PLOT_DF$Group, levels = names(group_list))
+
+PLOT_DF$Predictors = gsub("_"," ",PLOT_DF$Predictors)
+
+PLOT_DF$Predictors = factor(PLOT_DF$Predictors, levels =  gsub("_"," ",unlist( group_list )))
 
 PLOT_DF$z.statistics = 0
+
+PLOT_DF$logit = 0
+
 PLOT_DF$Cv = NA
+
+PLOT_DF$MPIP = 0
 
 for (i in names( Plot_lst )) {
   Plot_df_i <- Plot_lst[[i]]
-  Plot_df_i <- Plot_df_i[Plot_df_i$variable == "z.value",]
-  idx <- match(Plot_df_i$X_lab, PLOT_DF$Predictors[PLOT_DF$Regulators == i])
-  PLOT_DF$z.statistics[idx + min(which(PLOT_DF$Regulators == i)) - 1] <- Plot_df_i$value
-  PLOT_DF$Cv1[which(PLOT_DF$Regulators == i)] <- Plot_df_i$Cv[1]
-  PLOT_DF$Cv2[which(PLOT_DF$Regulators == i)] <- Plot_df_i$Cv[2]
+  z_indx <- Plot_df_i$variable == "z.value"
+  Plot_df_i2 <- Plot_df_i[z_indx,c("X_lab","value","Cv")]
+  idx <- match(as.character( Plot_df_i2$X_lab ),  PLOT_DF$Predictors[PLOT_DF$Condations == i])
+  idx_plot_df <- idx + min(which(PLOT_DF$Condations == i)) - 1
+  PLOT_DF$z.statistics[idx_plot_df] <- Plot_df_i2$value
+  PLOT_DF$logit[idx_plot_df] <- Plot_df_i$value[!z_indx]
+  PLOT_DF$Cv[which(PLOT_DF$Condations == i)] <- Plot_df_i2$Cv[1]
+  MPIP_i <- read.csv(paste0(save_dir,"/",i,"/","marginal_posterior_inclusion_prob.csv"))
+  idx2 <- match(gsub("_"," ",MPIP_i$Covariate),PLOT_DF$Predictors[PLOT_DF$Condations == i])
+  PLOT_DF$MPIP[idx2 + min(which(PLOT_DF$Condations == i)) - 1] <- MPIP_i$MPIP[idx2]
 }
 
 PLOT_DF$Direction = "Not selected"
 PLOT_DF$Direction[PLOT_DF$z.statistics > 0] = "Positive"
 PLOT_DF$Direction[PLOT_DF$z.statistics < 0] = "Negative"
 
+PLOT_DF$Direction  = factor(PLOT_DF$Direction,levels = c("Positive","Negative","Not selected"))
+
 PLOT_DF$ABS_Z = abs(PLOT_DF$z.statistics)
 
-Z_STAT <- ggplot(PLOT_DF,aes(x = Predictors, y = ABS_Z)) + geom_bar(stat = "identity", width = .5, colour = 0, aes(fill = Direction)) + facet_grid(Group ~ Regulators,scales = "free",space = "free_y") + coord_flip() + theme_linedraw() + geom_hline(aes(yintercept = Cv1), alpha = .5, linetype = 2, size = .35) +
+Z_STAT <- ggplot(PLOT_DF,aes(x = Predictors, y = ABS_Z)) + geom_bar(stat = "identity", width = .5, colour = 0, aes(fill = Direction)) + facet_grid(Group ~ Condations,scales = "free",space = "free_y") + coord_flip() + theme_linedraw() + geom_hline(aes(yintercept = Cv), alpha = .5, linetype = 2, size = .35) +
   theme(panel.grid.minor.x = element_line(linetype = 0),
         panel.grid.minor.y = element_line(colour = "grey90"),
         panel.grid.major.x = element_line(colour = "grey90"),
-        panel.grid.major.y = element_line(colour = "grey90")) + labs(y = "abs(z.satistics)") + scale_fill_brewer(palette = "Dark2")
+        panel.grid.major.y = element_line(colour = "grey90")) + labs(y = "Absolute values of Wald test z satistics", title = "Test statistics of logistic regression analysis") + scale_fill_manual(values = c("#1b9e77","#7570b3",NA))
 
-ggsave("z_bar.pdf",Z_STAT,width = 15,height = 12.5)
+
+ggsave(paste0(save_dir,"/","statistics-bar.pdf"),Z_STAT,width = 2 + 1.6*length(idx_sample),height = 1.5 + .2*ncol(Features))
+
+##Plot logits
+
+LOGIT <- ggplot(PLOT_DF,aes(x = Predictors, y = abs(logit))) + geom_bar(stat = "identity", width = .5, colour = 0, aes(fill = Direction)) + facet_grid(Group ~ Condations,scales = "free",space = "free_y") + coord_flip() + theme_linedraw() +
+  theme(panel.grid.minor.x = element_line(linetype = 0),
+        panel.grid.minor.y = element_line(colour = "grey90"),
+        panel.grid.major.x = element_line(colour = "grey90"),
+        panel.grid.major.y = element_line(colour = "grey90")) + labs(y = "Absolute values of logit estimates", title = "Logit estimates of logistic regression analysis") + scale_fill_manual(values = c("#d95f02","#7570b3",NA))
+
+ggsave(paste0(save_dir,"/","effectsize-bar.pdf"), LOGIT, width = 2 + 1.6*length(idx_sample),height = 1.5 + .2*ncol(Features))
+
+PLOT_DF$Predictors = factor(PLOT_DF$Predictors,levels = rev(levels( PLOT_DF$Predictors )))
+
+##Plot marginal posterior inclusion probabilities (For model selection)
+MPIP <- ggplot(PLOT_DF,aes(y = Predictors, x = Condations)) + geom_tile(aes(fill = MPIP)) + theme_linedraw() +
+  theme(panel.grid.minor.x = element_line(linetype = 0),
+        panel.grid.minor.y = element_line(colour = "grey90"),
+        panel.grid.major.x = element_line(colour = "grey90"),
+        panel.grid.major.y = element_line(colour = "grey90"),
+        axis.text.x = element_text(angle = 310, vjust =.9, hjust = .1),
+        legend.position = "top",
+        legend.direction = "horizontal",
+        legend.box = "vertical",
+        legend.justification = "center",
+        plot.margin = margin(1,2,1,.5,"cm")) + labs(x = "Conditions") + scale_fill_continuous(low = "#fff7bc", high = "#d95f0e")
+
+ggsave(paste0(save_dir,"/","model-selection.pdf"), MPIP, width = 2.2 + .25*length(idx_sample),height = 1 + .2*ncol(Features))
+
+##Plot model goodness of fit
+Plot_df_Dev <- data.frame(Conditions = rep( idx_sample, 2))
+Plot_df_Dev$Deviance = 0
+Plot_df_Dev$Class = rep(c("Residual","Explained"),each = length(idx_sample))
+Plot_df_Dev$Dof
+Plot_df_Dev$lab_y_pos = 0
+
+for (i in 1:length(idx_sample)) {
+  GOF <- read.csv(paste0(save_dir,"/",idx_sample[i],"/","Deviance_and_Dof.csv"))
+  Plot_df_Dev$Deviance[i] <- GOF$Deviances[1]
+  Explained_deviance_i <- GOF$Deviances[2] - GOF$Deviances[1]
+  Plot_df_Dev$Deviance[i+length(idx_sample)] <- Explained_deviance_i
+  Plot_df_Dev$Dof[i] <- paste0(GOF$Dof[2]-GOF$Dof[1])
+  Plot_df_Dev$Dof[i+length(idx_sample)] <- GOF$Dof[1]
+  Plot_df_Dev$lab_y_pos[i] =  GOF$Deviances[1] + Explained_deviance_i/2
+  Plot_df_Dev$lab_y_pos[i+length(idx_sample)] = GOF$Deviances[1]/2
+}
+
+
+Gof <- ggplot(Plot_df_Dev,aes(x = Conditions, label = Dof)) +
+  geom_bar(stat = "identity",aes(fill = Class,y = Deviance), colour = "black", width = 1) +
+  theme(axis.text.x = element_text(angle = 310, vjust =.9, hjust = .1)) +
+  geom_label(aes(y = lab_y_pos),size = 3) + scale_fill_brewer(palette = "Spectral") + labs(title = "Goodness of fits of the logistic models")
+
+ggsave(paste0(save_dir,"/","Goodness-of-fit.pdf"), Gof, width = 1.8 + .5*length(idx_sample),height = 3.3)
 
 }

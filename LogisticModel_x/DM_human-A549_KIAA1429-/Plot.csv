@@ -1,0 +1,79 @@
+"","X_lab","variable","value","Cv"
+"1","Intercept","Estimate",-2.62107125654689,NA
+"2","UTR5","Estimate",-2.92401490817874,NA
+"3","UTR3","Estimate",1.51806307025885,NA
+"4","CDS","Estimate",-0.70190790258675,NA
+"5","Stop codons","Estimate",-0.965303959810361,NA
+"6","Start codons","Estimate",-2.51956109553647,NA
+"7","exons","Estimate",1.79357934665276,NA
+"8","Last exons 50bp","Estimate",-1.1127457424279,NA
+"9","Pos UTR5","Estimate",3.0945260259487,NA
+"10","Pos UTR3","Estimate",-1.92369116665327,NA
+"11","Pos CDS","Estimate",1.72894308909713,NA
+"12","Pos exons","Estimate",-2.19170159281081,NA
+"13","length UTR3","Estimate",-0.420623154201259,NA
+"14","length CDS","Estimate",-0.463741367633866,NA
+"15","long exon","Estimate",3.33449801734496,NA
+"16","length gene ex","Estimate",0.188587766526842,NA
+"17","length gene full","Estimate",0.203532753623157,NA
+"18","AAACA","Estimate",-0.504042125795732,NA
+"19","GAACA","Estimate",0.201170856358529,NA
+"20","AGACA","Estimate",0.323657243999124,NA
+"21","GGACA","Estimate",1.21364457751178,NA
+"22","AAACT","Estimate",0.580179413128239,NA
+"23","GAACT","Estimate",1.55751746061665,NA
+"24","AGACT","Estimate",1.42561052783743,NA
+"25","GGACT","Estimate",2.15104204585073,NA
+"26","AAACC","Estimate",-0.219414846733068,NA
+"27","GAACC","Estimate",0.168412452903108,NA
+"28","GGACC","Estimate",0.744504848682452,NA
+"29","PC 1nt","Estimate",-0.407455421754899,NA
+"30","FC 1nt","Estimate",0.401440060549206,NA
+"31","FC 101nt","Estimate",-0.221548699865739,NA
+"32","struct loop","Estimate",0.310428679420068,NA
+"33","YTHDC1 TREW","Estimate",-1.64666773999659,NA
+"34","YTHDF1 TREW","Estimate",0.920087902533101,NA
+"35","YTHDF2 TREW","Estimate",1.31467630084007,NA
+"36","sncRNA","Estimate",0.0934777043495809,NA
+"37","Isoform num","Estimate",-0.183718647104692,NA
+"38","GC cont genes","Estimate",-0.115161140458987,NA
+"39","GC cont 101bp","Estimate",-0.522244561759252,NA
+"40","Intercept","z.value",-7.69770873941716,3.21996750501706
+"41","UTR5","z.value",-5.40389072321235,-3.21996750501706
+"42","UTR3","z.value",6.44935491262575,NA
+"43","CDS","z.value",-3.04412270211147,NA
+"44","Stop codons","z.value",-9.39079672404595,NA
+"45","Start codons","z.value",-20.4963253985967,NA
+"46","exons","z.value",5.19676059107778,NA
+"47","Last exons 50bp","z.value",-6.52450663826535,NA
+"48","Pos UTR5","z.value",4.21890970120021,NA
+"49","Pos UTR3","z.value",-5.88472841700564,NA
+"50","Pos CDS","z.value",9.19643340894363,NA
+"51","Pos exons","z.value",-10.2786518165541,NA
+"52","length UTR3","z.value",-4.3568191407066,NA
+"53","length CDS","z.value",-4.67803185203795,NA
+"54","long exon","z.value",31.799939808918,NA
+"55","length gene ex","z.value",2.4755161025247,NA
+"56","length gene full","z.value",2.61731029002795,NA
+"57","AAACA","z.value",-2.32453643631153,NA
+"58","GAACA","z.value",0.992506952017298,NA
+"59","AGACA","z.value",1.67436212398966,NA
+"60","GGACA","z.value",6.83026378294525,NA
+"61","AAACT","z.value",2.82478572125238,NA
+"62","GAACT","z.value",7.7652589134079,NA
+"63","AGACT","z.value",7.01938720044935,NA
+"64","GGACT","z.value",11.1518866479322,NA
+"65","AAACC","z.value",-0.973549587197359,NA
+"66","GAACC","z.value",0.815472315338796,NA
+"67","GGACC","z.value",4.18891064068838,NA
+"68","PC 1nt","z.value",-3.85262075672737,NA
+"69","FC 1nt","z.value",3.57292914422113,NA
+"70","FC 101nt","z.value",-2.66883915149309,NA
+"71","struct loop","z.value",2.34402397554988,NA
+"72","YTHDC1 TREW","z.value",-5.41332847592464,NA
+"73","YTHDF1 TREW","z.value",3.67627818998475,NA
+"74","YTHDF2 TREW","z.value",5.22546447976686,NA
+"75","sncRNA","z.value",0.0347410109176669,NA
+"76","Isoform num","z.value",-3.61559576100168,NA
+"77","GC cont genes","z.value",-1.90096157403205,NA
+"78","GC cont 101bp","z.value",-7.8257246007587,NA

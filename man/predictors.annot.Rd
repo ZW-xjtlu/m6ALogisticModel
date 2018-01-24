@@ -143,32 +143,26 @@ library(BSgenome.Hsapiens.UCSC.hg19)
 library(fitCons.UCSC.hg19)
 library(phastCons100way.UCSC.hg19)
 
-gr <- GRanges(seqnames =  'chr3',
-IRanges(100:200, width=1),
-strand='-')
 
-SE <- SummarizedExperiment()
-rowRanges(SE) = gr
-
-Feature_lst_hg19 = list(
-HNRNPC_eCLIP = readRDS("eCLIP_HNRNPC.rds"),
-YTHDC1_TREW = readRDS("YTHDC1_TREW_gr.rds"),
-YTHDF1_TREW = readRDS("YTHDF1_TREW_gr.rds"),
-YTHDF2_TREW = readRDS("YTHDF2_TREW_gr.rds"),
-miR_targeted_genes = readRDS("miR_targeted_genes_grl.rds"),
-miRanda = readRDS("miRanda_hg19_gr.rds"),
-TargetScan = readRDS("TargetScan_hg19_gr.rds"),
-Verified_miRtargets = readRDS("verified_targets.rds")
+Feature_List_hg19 = list(
+HNRNPC_eCLIP = eCLIP_HNRNPC_gr,
+YTHDC1_TREW = YTHDC1_TREW_gr,
+YTHDF1_TREW = YTHDF1_TREW_gr,
+YTHDF2_TREW = YTHDF2_TREW_gr,
+miR_targeted_genes = miR_targeted_genes_grl,
+#miRanda = miRanda_hg19_gr,
+TargetScan = TargetScan_hg19_gr,
+Verified_miRtargets = verified_targets_gr
 )
 
-SE_features_added <- predictors.annot(se = SE,
+SE_features_added <- predictors.annot(se = SE_example,
                        txdb = TxDb.Hsapiens.UCSC.hg19.knownGene,
                          bsgnm = Hsapiens,
                            fc = fitCons.UCSC.hg19,
                            pc = phastCons100way.UCSC.hg19,
                          struct_hybridize = Struc_hg19,
-                       feature_lst = Feature_lst_hg19,
-                     HK_genes_list = HK_hg19)
+                       feature_lst = Feature_List_hg19,
+                     HK_genes_list = HK_hg19_eids)
 
 mcols(SE_features_added) ###Check the generated feature matrix.
 
