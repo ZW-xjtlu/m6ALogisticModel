@@ -1,13 +1,19 @@
 ---
-title: "User guide for package m6ALogisticModel"
-output: html_document
+output: github_document
 ---
 
-<hr/>
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
 ```
+
+
+# User guide for package m6ALogisticModel
 
 ## Installation
 Currently, you could install this package using this command.
