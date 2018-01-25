@@ -80,7 +80,6 @@ save_dir = "LogisticModel_x",
 sample_names_coldata = "ID"
 )
 
-
 }
 \seealso{
 Use \code{\link{predictors.annot}} to annotate features.

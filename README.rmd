@@ -145,12 +145,14 @@ SE <- m6ALogisticModel::predictors.annot(se = SE,
 - You could make this process much more efficient with reduced `MCMC_interations` number and reduced instance numbers in your matrix.
 
 ```{r,cache = T,eval=FALSE}
+SE <- readRDS("SE.rds")
+library(m6ALogisticModel)
+library(SummarizedExperiment)
 Group_list <- group_list_default[names(group_list_default) != "Evolution"]
-
-m6ALogisticModel::logistic.modeling(SE[1:10000,],
+m6ALogisticModel::logistic.modeling(SE,
                                     save_dir = "Conservation_scores",
                                     group_list = Group_list,
-                                    MCMC_iterations = 10000)
+                                    MCMC_iterations = 100000)
 ```
 
 

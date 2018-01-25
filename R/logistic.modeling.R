@@ -62,7 +62,7 @@
 #' sample_names_coldata = "ID"
 #' )
 #'
-#'
+#' @import GenomicRanges
 #' @import ggplot2
 #' @import SummarizedExperiment
 #' @import BAS
@@ -101,7 +101,7 @@ if(!is.null(colnames(Target_matrix))) {
 
 if(any(duplicated(idx_sample))) stop("The sample index contains duplicated names.")
 
-Features = mcols( se )
+Features = SummarizedExperiment::mcols( se )
 
 colnames(Target_matrix) = idx_sample
 
