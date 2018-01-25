@@ -1,27 +1,11 @@
 "","X_lab","variable","value","Cv"
-"1","Intercept","Estimate",-4.01624971521159,NA
-"2","CDS","Estimate",4.24490216365516,NA
-"3","Pos UTR3","Estimate",-0.147872313622133,NA
-"4","Pos CDS","Estimate",0.964295745100933,NA
-"5","Pos exons","Estimate",-0.380334547718903,NA
-"6","length CDS","Estimate",0.475908583199451,NA
-"7","long exon","Estimate",-0.805217615726204,NA
-"8","length gene full","Estimate",-0.38695097435252,NA
-"9","miR targeted genes","Estimate",0.203192256080403,NA
-"10","Isoform num","Estimate",0.153793046789151,NA
-"11","HK genes","Estimate",1.05247236779306,NA
-"12","GC cont genes","Estimate",-0.142729258971506,NA
-"13","GC cont 101bp","Estimate",-0.300057256190094,NA
-"14","Intercept","z.value",-21.5437535924395,2.89051156069174
-"15","CDS","z.value",23.4706981245334,-2.89051156069174
-"16","Pos UTR3","z.value",-0.399428140359738,NA
-"17","Pos CDS","z.value",10.4826400855423,NA
-"18","Pos exons","z.value",-4.16411947890464,NA
-"19","length CDS","z.value",11.2806355230503,NA
-"20","long exon","z.value",-13.3227679517195,NA
-"21","length gene full","z.value",-11.5035395505324,NA
-"22","miR targeted genes","z.value",3.32555690775673,NA
-"23","Isoform num","z.value",5.35671701772085,NA
-"24","HK genes","z.value",14.2618549085449,NA
-"25","GC cont genes","z.value",-3.48975482561223,NA
-"26","GC cont 101bp","z.value",-7.55443039736345,NA
+"1","Intercept","Estimate",-0.548314570069494,NA
+"2","Start codons","Estimate",1.15466016953591,NA
+"3","Last exons 50bp","Estimate",-0.215258317733779,NA
+"4","struct loop","Estimate",-0.137684156644085,NA
+"5","GC cont 101bp","Estimate",-0.196587629008112,NA
+"6","Intercept","z.value",-75.2062324203709,2.5758293035489
+"7","Start codons","z.value",89.3399591635352,-2.5758293035489
+"8","Last exons 50bp","z.value",-7.28452680485398,NA
+"9","struct loop","z.value",-7.19111910254314,NA
+"10","GC cont 101bp","z.value",-32.7062376815888,NA

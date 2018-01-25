@@ -1,7 +1,3 @@
 "","X_lab","variable","value","Cv"
-"1","Intercept","Estimate",0.0914737955549241,NA
-"2","Stop codons","Estimate",0.00641196900247808,NA
-"3","length gene full","Estimate",-0.100420134862349,NA
-"4","Intercept","z.value",3.6927432204161,2.49770547441237
-"5","Stop codons","z.value",0.150727084771133,-2.49770547441237
-"6","length gene full","z.value",-4.68335841530492,NA
+"1","Intercept","Estimate",0.0511391337002799,NA
+"2","Intercept","z.value",9.55750051572684,1.95996398454005

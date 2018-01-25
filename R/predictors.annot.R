@@ -282,7 +282,7 @@ Feature_matrix$length_UTR3 <- Properties_map(query_gr = row_gr,
 
 Feature_matrix$length_UTR3[is.na(Feature_matrix$length_UTR3)] = 0
 
-i  = Speak("3'UTR length (z scores) ",i)
+i  = Speak("3'UTR length (z-score) ",i)
 
 Feature_matrix$length_UTR5 <- Properties_map(query_gr = row_gr,
                                              feature_gr = UTR5,
@@ -292,7 +292,7 @@ Feature_matrix$length_UTR5 <- Properties_map(query_gr = row_gr,
 
 Feature_matrix$length_UTR5[is.na(Feature_matrix$length_UTR5)] = 0
 
-i  = Speak("5'UTR length (z scores) ",i)
+i  = Speak("5'UTR length (z-score) ",i)
 
 Feature_matrix$length_CDS <- Properties_map(query_gr = row_gr,
                                              feature_gr = CDS,
@@ -302,7 +302,7 @@ Feature_matrix$length_CDS <- Properties_map(query_gr = row_gr,
 
 Feature_matrix$length_CDS[is.na(Feature_matrix$length_CDS)] = 0
 
-i  = Speak("CDS length (z scores) ",i)
+i  = Speak("CDS length (z-score) ",i)
 
  #
  # - long_exons: Long exon (length > 400bp).
@@ -439,7 +439,7 @@ i  = Speak("snc RNA (<= 200bp)",i)
  # - lncRNA: long noncoding RNA (> 200bp)
  #
 Feature_matrix$lncRNA  <- row_gr%over%exbytx_nc[lnc_idx]
-i  = Speak("snc RNA (> 200bp)",i)
+i  = Speak("lnc RNA (> 200bp)",i)
 
  # - Isoform_num: Transcript isoform numbers standardized by z score.
  #

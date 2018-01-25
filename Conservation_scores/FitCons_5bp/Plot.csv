@@ -1,7 +1,3 @@
 "","X_lab","variable","value","Cv"
-"1","Intercept","Estimate",-0.313561424106344,NA
-"2","YTHDF1 TREW","Estimate",0.00104040655555612,NA
-"3","GC cont genes","Estimate",-0.10294561761749,NA
-"4","Intercept","z.value",-13.7839504814405,2.39397979981851
-"5","YTHDF1 TREW","z.value",0.00659354305310665,-2.39397979981851
-"6","GC cont genes","z.value",-4.26295292017428,NA
+"1","Intercept","Estimate",-0.210463359909724,NA
+"2","Intercept","z.value",-37.9704932617445,1.95996398454005

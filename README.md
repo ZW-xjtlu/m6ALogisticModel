@@ -25,7 +25,7 @@ The major reasons for me to create this package is to:
 
 **Logistic regression modeling** seems to be a reasonable computational technique here, since it can efficiently quantify the scientific and statistical significance for all the features, while adjust their dependencies on each others. The logistic regression is coupled with bayesian model selection method on genaralized linear model for reasons of reduced model qualities and inferential power in the presence of large amount of highly correlated features.
 
-The funcions for transcript feature annotation and the logistic modeling are included in this package; while at the same time, users can introduce more genomic features defined by them self using GRanges object. Effective visualization for comparation between multiple selected models are also implemented in this package.
+The funcions for transcript feature annotation and the logistic modeling are included in this package; while at the same time, users can introduce more genomic features defined by them self using GRanges object. Effective visualization for comparation between multiple selected models is also implemented in this package.
 
 <hr/>
 
@@ -183,7 +183,7 @@ SE <- m6ALogisticModel::predictors.annot(se = SE,
     ## Feature 38 : annotation feature --- TargetScan is generated.
     ## Feature 39 : annotation feature --- Verified_miRtargets is generated.
     ## Feature 40 : snc RNA (<= 200bp) is generated.
-    ## Feature 41 : snc RNA (> 200bp) is generated.
+    ## Feature 41 : lnc RNA (> 200bp) is generated.
     ## Feature 42 : Isoform number z score is generated.
     ## Feature 43 : House keeping genes is generated.
     ## Feature 44 : Gene level GC content z score is generated.
