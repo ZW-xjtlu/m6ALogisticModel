@@ -1,33 +1,12 @@
 ---
-<<<<<<< HEAD
+title: "User guide for package m6ALogisticModel"
 output: github_document
 ---
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, echo = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
-)
-```
-
-
-# User guide for package m6ALogisticModel
-
-=======
-title: "User guide for package m6ALogisticModel"
-output: html_document
----
-
-<hr/>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
->>>>>>> dc0234ee0afea5428c0ddaf181cc04f6a879f6ae
 ## Installation
 Currently, you could install this package using this command.
 ```{r,eval=FALSE}
