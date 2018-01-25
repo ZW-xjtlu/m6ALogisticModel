@@ -48,7 +48,8 @@ RMBase2_hg19_gr <- rowRanges( SE_example )
 ```
 
 <hr/>
-### Define targets (response variables)
+Define targets (response variables)
+-----------------------------------
 
 The PhastCons scores and fitCons scores of the m6A underlying sequences are extracted, each with bins of 1bp, 5bp, and 51bp.
 
@@ -109,7 +110,8 @@ for(i in 1:6) {
 The targets still face the issue of not having balanced classes, but for now, we will just omit it and plug it into our logistic regression functions.
 
 <hr/>
-### Generate features (predictors)
+Generate features (predictors)
+------------------------------
 
 The hg19 `TxDb` and `BSgenome` are loaded for the purpose of extracting the transcriptomic features.
 
@@ -186,7 +188,8 @@ SE <- m6ALogisticModel::predictors.annot(se = SE,
 49 Transcriptomic features on hg19 are automatically attached by the command and data defined in `m6ALogisticModel`.
 
 <hr/>
-### Model selection and inference
+Model selection and inference
+-----------------------------
 
 -   Run the following commands, you will find results after some running times.
 -   You could make this process much more efficient with reduced `MCMC_interations` number and reduced instance numbers in your matrix.
@@ -217,63 +220,10 @@ sessionInfo()
     ## [1] zh_CN.UTF-8/zh_CN.UTF-8/zh_CN.UTF-8/C/zh_CN.UTF-8/zh_CN.UTF-8
     ## 
     ## attached base packages:
-    ## [1] stats4    parallel  stats     graphics  grDevices utils     datasets 
-    ## [8] methods   base     
-    ## 
-    ## other attached packages:
-    ##  [1] BSgenome.Hsapiens.UCSC.hg19_1.4.0      
-    ##  [2] BSgenome_1.46.0                        
-    ##  [3] rtracklayer_1.38.2                     
-    ##  [4] Biostrings_2.46.0                      
-    ##  [5] XVector_0.18.0                         
-    ##  [6] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
-    ##  [7] GenomicFeatures_1.30.0                 
-    ##  [8] AnnotationDbi_1.40.0                   
-    ##  [9] ggplot2_2.2.1                          
-    ## [10] dplyr_0.7.4                            
-    ## [11] SummarizedExperiment_1.8.1             
-    ## [12] DelayedArray_0.4.1                     
-    ## [13] matrixStats_0.52.2                     
-    ## [14] Biobase_2.38.0                         
-    ## [15] phastCons100way.UCSC.hg19_3.6.0        
-    ## [16] fitCons.UCSC.hg19_3.6.0                
-    ## [17] GenomicScores_1.2.2                    
-    ## [18] GenomicRanges_1.30.1                   
-    ## [19] GenomeInfoDb_1.14.0                    
-    ## [20] IRanges_2.12.0                         
-    ## [21] S4Vectors_0.16.0                       
-    ## [22] BiocGenerics_0.24.0                    
-    ## [23] m6ALogisticModel_0.1.0                 
+    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] httr_1.3.1                    RMySQL_0.10.13               
-    ##  [3] bit64_0.9-7                   AnnotationHub_2.10.1         
-    ##  [5] shiny_1.0.5                   assertthat_0.2.0             
-    ##  [7] interactiveDisplayBase_1.16.0 blob_1.1.0                   
-    ##  [9] GenomeInfoDbData_1.0.0        Rsamtools_1.30.0             
-    ## [11] yaml_2.1.16                   progress_1.1.2               
-    ## [13] pillar_1.0.1                  RSQLite_2.0                  
-    ## [15] backports_1.1.2               lattice_0.20-35              
-    ## [17] glue_1.2.0                    digest_0.6.13                
-    ## [19] colorspace_1.3-2              htmltools_0.3.6              
-    ## [21] httpuv_1.3.5                  Matrix_1.2-12                
-    ## [23] plyr_1.8.4                    XML_3.98-1.9                 
-    ## [25] pkgconfig_2.0.1               biomaRt_2.34.1               
-    ## [27] zlibbioc_1.24.0               xtable_1.8-2                 
-    ## [29] scales_0.5.0                  BiocParallel_1.12.0          
-    ## [31] tibble_1.4.1                  BAS_1.4.7                    
-    ## [33] lazyeval_0.2.1                magrittr_1.5                 
-    ## [35] mime_0.5                      memoise_1.1.0                
-    ## [37] evaluate_0.10.1               BiocInstaller_1.28.0         
-    ## [39] tools_3.4.2                   prettyunits_1.0.2            
-    ## [41] stringr_1.2.0                 munsell_0.4.3                
-    ## [43] bindrcpp_0.2                  compiler_3.4.2               
-    ## [45] rlang_0.1.6                   grid_3.4.2                   
-    ## [47] RCurl_1.95-4.10               bitops_1.0-6                 
-    ## [49] labeling_0.3                  rmarkdown_1.8                
-    ## [51] gtable_0.2.0                  codetools_0.2-15             
-    ## [53] DBI_0.7                       reshape2_1.4.3               
-    ## [55] R6_2.2.2                      GenomicAlignments_1.14.1     
-    ## [57] knitr_1.18                    bit_1.1-12                   
-    ## [59] bindr_0.1                     rprojroot_1.3-2              
-    ## [61] stringi_1.1.6                 Rcpp_0.12.14
+    ##  [1] compiler_3.4.2  backports_1.1.2 magrittr_1.5    rprojroot_1.3-2
+    ##  [5] tools_3.4.2     htmltools_0.3.6 yaml_2.1.16     Rcpp_0.12.14   
+    ##  [9] stringi_1.1.6   rmarkdown_1.8   knitr_1.18      stringr_1.2.0  
+    ## [13] digest_0.6.13   evaluate_0.10.1

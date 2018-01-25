@@ -52,7 +52,7 @@ RMBase2_hg19_gr <- rowRanges( SE_example )
 
 <hr/>
 
-###Define targets (response variables)
+## Define targets (response variables)
 
 The PhastCons scores and fitCons scores of the m6A underlying sequences are extracted, each with bins of 1bp, 5bp, and 51bp.
 
@@ -106,7 +106,7 @@ The targets still face the issue of not having balanced classes, but for now, we
 
 <hr/>
 
-###Generate features (predictors)
+## Generate features (predictors)
 
 The hg19 `TxDb` and `BSgenome` are loaded for the purpose of extracting the transcriptomic features.
 
@@ -138,7 +138,7 @@ SE <- m6ALogisticModel::predictors.annot(se = SE,
 
 <hr/>
 
-###Model selection and inference
+## Model selection and inference
 
 - Run the following commands, you will find results after some running times.
 - You could make this process much more efficient with reduced `MCMC_interations` number and reduced instance numbers in your matrix.
