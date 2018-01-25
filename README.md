@@ -11,6 +11,7 @@ devtools::install_github("ZhenWei10/m6ALogisticModel")
 ```
 
 <hr/>
+
 Motivation
 ----------
 
@@ -27,6 +28,7 @@ The major reasons for me to create this package is to:
 The funcions for transcript feature annotation and the logistic modeling are included in this package; while at the same time, users can introduce more genomic features defined by them self using GRanges object. Effective visualization for comparation between multiple selected models are also implemented in this package.
 
 <hr/>
+
 A case study with this package.
 -------------------------------
 
@@ -48,6 +50,7 @@ RMBase2_hg19_gr <- rowRanges( SE_example )
 ```
 
 <hr/>
+
 Define targets (response variables)
 -----------------------------------
 
@@ -110,6 +113,7 @@ for(i in 1:6) {
 The targets still face the issue of not having balanced classes, but for now, we will just omit it and plug it into our logistic regression functions.
 
 <hr/>
+
 Generate features (predictors)
 ------------------------------
 
@@ -188,6 +192,7 @@ SE <- m6ALogisticModel::predictors.annot(se = SE,
 49 Transcriptomic features on hg19 are automatically attached by the command and data defined in `m6ALogisticModel`.
 
 <hr/>
+
 Model selection and inference
 -----------------------------
 
@@ -204,6 +209,7 @@ m6ALogisticModel::logistic.modeling(SE,
 ```
 
 <hr/>
+
 ``` r
 sessionInfo()
 ```
