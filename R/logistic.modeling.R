@@ -32,7 +32,7 @@
 #' library(fitCons.UCSC.hg19)
 #' library(phastCons100way.UCSC.hg19)
 #'
-#' Feature_lst_hg19 = list(
+#' Feature_List_hg19 = list(
 #' HNRNPC_eCLIP = eCLIP_HNRNPC_gr,
 #' YTHDC1_TREW = YTHDC1_TREW_gr,
 #' YTHDF1_TREW = YTHDF1_TREW_gr,
@@ -49,7 +49,7 @@
 #'                                      bsgnm = Hsapiens,
 #'                                      fc = fitCons.UCSC.hg19,
 #'                                      pc = phastCons100way.UCSC.hg19,
-#'                                      struct_hybridize = rBS2ndStructure::Struc_hg19,
+#'                                      struct_hybridize = Struc_hg19,
 #'                                      feature_lst = Feature_List_hg19,
 #'                                      HK_genes_list = HK_hg19_eids)
 #'
