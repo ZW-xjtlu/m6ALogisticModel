@@ -131,7 +131,15 @@ write.csv(MPIP, paste0(save_dir_i,"/marginal_posterior_inclusion_prob.csv"),row.
 
 indx_best_modelI <- predict(BAS_I, estimator = decision_method, top = top)$bestmodel
 
+if (sum(indx_best_modelI) == 0) {
+
+Final_moddel <- glm(Design$Y ~ 1, family = binomial(link = "logit"))
+
+} else {
+
 Final_moddel <- glm(Y ~ ., data = Design[,c(indx_best_modelI+1)], family = binomial(link = "logit"))
+
+}
 
 summary_glm <- summary(Final_moddel)
 

@@ -1,0 +1,45 @@
+"","X_lab","variable","value","Cv"
+"1","Intercept","Estimate",0.0656119914462111,NA
+"2","UTR5","Estimate",0.132860072333175,NA
+"3","UTR3","Estimate",-0.254668697698218,NA
+"4","CDS","Estimate",0.984623017401316,NA
+"5","Stop codons","Estimate",0.274577415854351,NA
+"6","Start codons","Estimate",0.25260335311474,NA
+"7","Pos CDS","Estimate",0.351231056474107,NA
+"8","Pos exons","Estimate",-0.323422322123118,NA
+"9","length CDS","Estimate",-0.335318563845997,NA
+"10","long exon","Estimate",-0.424595024490924,NA
+"11","length gene full","Estimate",0.255300950549763,NA
+"12","AAACA","Estimate",-0.361749827758478,NA
+"13","GAACA","Estimate",-0.430186660255286,NA
+"14","AGACA","Estimate",0.204631023779775,NA
+"15","AAACC","Estimate",-0.198129566517072,NA
+"16","struct hybridize","Estimate",-0.453622251767371,NA
+"17","YTHDF1 TREW","Estimate",0.549300915403571,NA
+"18","miR targeted genes","Estimate",0.231920678012829,NA
+"19","TargetScan","Estimate",1.70645097751017,NA
+"20","HK genes","Estimate",0.250799431554177,NA
+"21","GC cont genes","Estimate",-0.0754031471316835,NA
+"22","GC cont 101bp","Estimate",-0.160795725648825,NA
+"23","Intercept","z.value",0.648581449596691,3.05206520186488
+"24","UTR5","z.value",1.30238254819257,-3.05206520186488
+"25","UTR3","z.value",-2.38996763014643,NA
+"26","CDS","z.value",8.92095159257319,NA
+"27","Stop codons","z.value",4.66488331932555,NA
+"28","Start codons","z.value",3.7408099536865,NA
+"29","Pos CDS","z.value",3.45082145870154,NA
+"30","Pos exons","z.value",-3.69316270776378,NA
+"31","length CDS","z.value",-9.03514370976577,NA
+"32","long exon","z.value",-6.20299442243721,NA
+"33","length gene full","z.value",8.43444065945599,NA
+"34","AAACA","z.value",-4.55801012263892,NA
+"35","GAACA","z.value",-5.13981676878775,NA
+"36","AGACA","z.value",2.37746114783615,NA
+"37","AAACC","z.value",-2.08803253513031,NA
+"38","struct hybridize","z.value",-3.02155206818617,NA
+"39","YTHDF1 TREW","z.value",2.79528098865565,NA
+"40","miR targeted genes","z.value",4.29777548255873,NA
+"41","TargetScan","z.value",9.02795543791215,NA
+"42","HK genes","z.value",3.98587357110868,NA
+"43","GC cont genes","z.value",-2.17684659989962,NA
+"44","GC cont 101bp","z.value",-4.98691389521542,NA

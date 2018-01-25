@@ -4,7 +4,7 @@ User guide for package m6ALogisticModel
 Installation
 ------------
 
-Currently, you could install this package using this command.
+Currently, you could install this package using this command in R.
 
 ``` r
 devtools::install_github("ZhenWei10/m6ALogisticModel")
@@ -191,7 +191,7 @@ SE <- m6ALogisticModel::predictors.annot(se = SE,
 Model selection and inference
 -----------------------------
 
--   Run the following commands, you will find results after some running times.
+-   Run the following commands, you will find the results saved under `save_dir` after some running times.
 -   You could make this process much more efficient with reduced `MCMC_interations` number and reduced instance numbers in your matrix.
 
 ``` r

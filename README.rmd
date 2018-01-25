@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Installation
-Currently, you could install this package using this command.
+Currently, you could install this package using this command in R.
 ```{r,eval=FALSE}
 devtools::install_github("ZhenWei10/m6ALogisticModel")
 ```
@@ -16,6 +16,7 @@ devtools::install_github("ZhenWei10/m6ALogisticModel")
 <hr/>
 
 ## Motivation
+
 The major reasons for me to create this package is to:
 
 1. Dealing with **confounding genomic features** that are common in RNA genomics.
@@ -140,16 +141,16 @@ SE <- m6ALogisticModel::predictors.annot(se = SE,
 
 ## Model selection and inference
 
-- Run the following commands, you will find results after some running times.
+- Run the following commands, you will find the results saved under `save_dir` after some running times.
 - You could make this process much more efficient with reduced `MCMC_interations` number and reduced instance numbers in your matrix.
 
 ```{r,cache = T,eval=FALSE}
 Group_list <- group_list_default[names(group_list_default) != "Evolution"]
 
-m6ALogisticModel::logistic.modeling(SE,
+m6ALogisticModel::logistic.modeling(SE[1:10000,],
                                     save_dir = "Conservation_scores",
                                     group_list = Group_list,
-                                    MCMC_iterations = 100000)
+                                    MCMC_iterations = 10000)
 ```
 
 

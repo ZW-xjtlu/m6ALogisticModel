@@ -50,7 +50,7 @@ library(BSgenome.Hsapiens.UCSC.hg19)
 library(fitCons.UCSC.hg19)
 library(phastCons100way.UCSC.hg19)
 
-Feature_lst_hg19 = list(
+Feature_List_hg19 = list(
 HNRNPC_eCLIP = eCLIP_HNRNPC_gr,
 YTHDC1_TREW = YTHDC1_TREW_gr,
 YTHDF1_TREW = YTHDF1_TREW_gr,
@@ -67,7 +67,7 @@ SE_features_added <- predictors.annot(se = SE_example,
                                      bsgnm = Hsapiens,
                                      fc = fitCons.UCSC.hg19,
                                      pc = phastCons100way.UCSC.hg19,
-                                     struct_hybridize = rBS2ndStructure::Struc_hg19,
+                                     struct_hybridize = Struc_hg19,
                                      feature_lst = Feature_List_hg19,
                                      HK_genes_list = HK_hg19_eids)
 
@@ -76,7 +76,8 @@ logistic.modeling(
 SE_features_added,
 MCMC_iterations = 50000,
 decision_method = "BPM",
-save_dir = "LogisticModel_x"
+save_dir = "LogisticModel_x",
+sample_names_coldata = "ID"
 )
 
 
