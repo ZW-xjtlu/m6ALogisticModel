@@ -19,7 +19,7 @@ The features or design matrix should be included in the \code{mcols} of the \cod
 
 \item{beta_prior}{prior distribution for regression coefficients, default setting is "robust"; see \code{\link{bas.glm}}}
 
-\item{model_prior}{Family of prior distribution on the models, default setting is beta.binomial(1,1); see \code{\link{bas.glm}}}
+\item{model_prior}{Family of the prior distribution on the models, default setting is beta.binomial(1,1); see \code{\link{bas.glm}}}
 
 \item{MCMC_iterations}{Number of models to sample, default setting is 100000,the maximum number is 1^e8.}
 
@@ -27,14 +27,14 @@ The features or design matrix should be included in the \code{mcols} of the \cod
 
 \item{top}{The number of top models used for BMA related decision making, default setting is NULL (BMA over all models); see \code{\link{predict.bas}}}
 
-\item{save_dir}{The path to save the statistics of the logistic models and their diagrams, the default path is named "LogisticModel".}
+\item{save_dir}{The path to save the statistics and the diagrams of the logistic models, the default path is named "LogisticModel".}
 
 \item{sample_names_coldata}{Provided column names in \code{colData} for the sample labels.}
 
 \item{group_list}{Optional, a \code{list} indicating the grouping of features in the output diagrams, by default it uses \code{\link{group_list_default}}.}
 }
 \value{
-A folder under the current working directory will be created, the reports and the diagrams will be saved within it.
+Folders under the directory specified by \code{save_dir will} be created, the reports and the diagrams will be saved within them.
 }
 \description{
 \code{logistic.modeling} is used to perform logistic regression analysis based on previously generated features, it reports logistic regression statistics after bayesian model selection,
@@ -74,7 +74,7 @@ SE_features_added <- predictors.annot(se = SE_example,
 
 logistic.modeling(
 SE_features_added,
-MCMC_iterations = 50000,
+MCMC_iterations = 10000,
 decision_method = "BPM",
 save_dir = "LogisticModel_x",
 sample_names_coldata = "ID"

@@ -12,16 +12,16 @@
 #' The features or design matrix should be included in the \code{mcols} of the \code{SummarizedExperiment} object.
 #'
 #' @param beta_prior prior distribution for regression coefficients, default setting is "robust"; see \code{\link{bas.glm}}
-#' @param model_prior Family of prior distribution on the models, default setting is beta.binomial(1,1); see \code{\link{bas.glm}}
+#' @param model_prior Family of the prior distribution on the models, default setting is beta.binomial(1,1); see \code{\link{bas.glm}}
 #' @param MCMC_iterations Number of models to sample, default setting is 100000,the maximum number is 1^e8.
 #' @param decision_method Decision method used in the bayesian model selection, default setting is 'BPM'; see \code{\link{predict.bas}}
 #' @param top The number of top models used for BMA related decision making, default setting is NULL (BMA over all models); see \code{\link{predict.bas}}
-#' @param save_dir The path to save the statistics of the logistic models and their diagrams, the default path is named "LogisticModel".
+#' @param save_dir The path to save the statistics and the diagrams of the logistic models, the default path is named "LogisticModel".
 #' @param sample_names_coldata Provided column names in \code{colData} for the sample labels.
 #' @param group_list Optional, a \code{list} indicating the grouping of features in the output diagrams, by default it uses \code{\link{group_list_default}}.
 #'
 #' @return
-#' A folder under the current working directory will be created, the reports and the diagrams will be saved within it.
+#' Folders under the directory specified by \code{save_dir will} be created, the reports and the diagrams will be saved within them.
 #'
 #' @seealso Use \code{\link{predictors.annot}} to annotate features.
 #'
@@ -56,7 +56,7 @@
 #'
 #' logistic.modeling(
 #' SE_features_added,
-#' MCMC_iterations = 50000,
+#' MCMC_iterations = 10000,
 #' decision_method = "BPM",
 #' save_dir = "LogisticModel_x",
 #' sample_names_coldata = "ID"
@@ -102,6 +102,8 @@ if(!is.null(colnames(Target_matrix))) {
 if(any(duplicated(idx_sample))) stop("The sample index contains duplicated names.")
 
 Features = SummarizedExperiment::mcols( se )
+
+if(ncol(Features) == 0) stop("There are 0 features, please run predictors.annot first.")
 
 colnames(Target_matrix) = idx_sample
 
