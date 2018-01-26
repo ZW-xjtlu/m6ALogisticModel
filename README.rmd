@@ -83,7 +83,7 @@ Merge the 3 GRanges into a single `SummarizedExperiment` object.
 Row_Ranges <-
   reduce(c(RMBase2_hg19_gr, 
   Random_RRACH,
-  Random_A))
+  Random_A), min.gapwidth=0L)
 
 SE <- SummarizedExperiment( matrix(rep(NA,6*length(Row_Ranges)) ,ncol = 6) )
 
