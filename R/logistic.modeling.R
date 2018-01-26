@@ -236,7 +236,8 @@ Z_STAT <- ggplot(PLOT_DF,aes(x = Predictors, y = ABS_Z)) + geom_bar(stat = "iden
   theme(panel.grid.minor.x = element_line(linetype = 0),
         panel.grid.minor.y = element_line(colour = "grey90"),
         panel.grid.major.x = element_line(colour = "grey90"),
-        panel.grid.major.y = element_line(colour = "grey90")) + labs(y = "Absolute values of Wald test z satistics", title = "Test statistics of logistic regression analysis") + scale_fill_manual(values = c("#1b9e77","#7570b3",NA))
+        panel.grid.major.y = element_line(colour = "grey90"),
+        plot.margin = margin(1.5,1.5,1,1,"cm")) + labs(y = "Absolute values of Wald test z satistics", title = "Test statistics of logistic regression analysis") + scale_fill_manual(values = c("#1b9e77","#7570b3",NA))
 
 
 ggsave(paste0(save_dir,"/","statistics-bar.pdf"),Z_STAT,width = 2 + 1.6*length(idx_sample),height = 1.5 + .2*ncol(Features))
@@ -247,7 +248,8 @@ LOGIT <- ggplot(PLOT_DF,aes(x = Predictors, y = abs(logit))) + geom_bar(stat = "
   theme(panel.grid.minor.x = element_line(linetype = 0),
         panel.grid.minor.y = element_line(colour = "grey90"),
         panel.grid.major.x = element_line(colour = "grey90"),
-        panel.grid.major.y = element_line(colour = "grey90")) + labs(y = "Absolute values of logit estimates", title = "Logit estimates of logistic regression analysis") + scale_fill_manual(values = c("#d95f02","#7570b3",NA))
+        panel.grid.major.y = element_line(colour = "grey90"),
+        plot.margin = margin(1.5,1.5,1,1,"cm")) + labs(y = "Absolute values of logit estimates", title = "Logit estimates of logistic regression analysis") + scale_fill_manual(values = c("#d95f02","#7570b3",NA))
 
 ggsave(paste0(save_dir,"/","effectsize-bar.pdf"), LOGIT, width = 2 + 1.6*length(idx_sample),height = 1.5 + .2*ncol(Features))
 

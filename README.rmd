@@ -44,12 +44,43 @@ library(phastCons100way.UCSC.hg19)
 ```
 The m6A location information is stored within data `SE_example` of the package `m6ALogisticMode`.
 
-The rowRanges contains the conserved m6A sites reported by RMBase2 between hg19 and mm10.
+The rowRanges contains the conserved m6A sites between hg19 and mm10 reported by RMBase2.
 
 ```{r, cache = TRUE,message=FALSE,warning=FALSE}
 library(SummarizedExperiment)
 RMBase2_hg19_gr <- rowRanges( SE_example )
 ```
+
+The hg19 `TxDb` and `BSgenome` are loaded for the purpose of extracting the transcriptomic features.
+
+```{r, cache = TRUE,warning=FALSE}
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+library(BSgenome.Hsapiens.UCSC.hg19)
+```
+
+First, I subset the m6A sites by overlapping with exons, because most of m6A sites on RMBase2 are overlapped with exons.
+
+```{r}
+mean(RMBase2_hg19_gr %over% exons(TxDb.Hsapiens.UCSC.hg19.knownGene))
+RMBase2_hg19_gr <- subsetByOverlaps(RMBase2_hg19_gr,exons(TxDb.Hsapiens.UCSC.hg19.knownGene))
+Num <- length(RMBase2_hg19_gr) 
+Num #There are around 0.137 million sites within it
+```
+
+Then, for purpose of control, I sample the same number of A sites and RRACH sites on the exonic regions mapped with the m6A sites above.
+
+```{r}
+exbytx_hg19 <- exonsBy(TxDb.Hsapiens.UCSC.hg19.knownGene, by = c("tx"))
+Subset_regions <- unlist( subsetByOverlaps( exbytx_hg19 , RMBase2_hg19_gr) )
+Random_RRACH <-  m6ALogisticModel::Sample_sequence("RRACH",  Subset_regions , Hsapiens, N = Num) - 2
+Random_A <-  m6ALogisticModel::Sample_sequence("A",  Subset_regions , Hsapiens, N = Num)
+```
+
+Merge the 3 GRanges into a Summarized Experiment
+```{r}
+
+```
+
 
 <hr/>
 
@@ -109,11 +140,7 @@ The targets still face the issue of not having balanced classes, but for now, we
 
 ## Generate features (predictors)
 
-The hg19 `TxDb` and `BSgenome` are loaded for the purpose of extracting the transcriptomic features.
-
 ```{r, cache = TRUE,warning=FALSE}
-library(TxDb.Hsapiens.UCSC.hg19.knownGene)
-library(BSgenome.Hsapiens.UCSC.hg19)
 SE <- SummarizedExperiment(ConsScore_matrix)
 rowRanges(SE) = RMBase2_hg19_gr
 
@@ -135,7 +162,7 @@ SE <- m6ALogisticModel::predictors.annot(se = SE,
                                    HK_genes_list = HK_hg19_eids)
 ```
 
-49 Transcriptomic features on hg19 are automatically attached by the command and data defined in `m6ALogisticModel`.
+45 Transcriptomic features on hg19 are automatically attached by the command and data defined in `m6ALogisticModel`.
 
 <hr/>
 
@@ -149,12 +176,14 @@ SE <- readRDS("SE.rds")
 library(m6ALogisticModel)
 library(SummarizedExperiment)
 Group_list <- group_list_default[names(group_list_default) != "Evolution"]
+set.seed(2)
 m6ALogisticModel::logistic.modeling(SE,
                                     save_dir = "Conservation_scores",
                                     group_list = Group_list,
-                                    MCMC_iterations = 10)
+                                    MCMC_iterations = 100000)
 ```
 
+- May best include a control collumn that is to.... randomly shuffled position aside 100bp ect.
 
 <hr/>
 
