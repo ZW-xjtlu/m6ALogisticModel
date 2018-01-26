@@ -17,13 +17,13 @@ devtools::install_github("ZhenWei10/m6ALogisticModel")
 
 ## Motivation
 
-The major reasons for me to create this package is to:
+The major reasons for me to create this package are:
 
-1. Dealing with **confounding genomic features** that are common in RNA genomics.
+1. Deal with **confounding genomic features** that are common in RNA genomics.
 
 2. Reduce the traditional work load for creating and screening the highly explanatory RNA features one by one, while unable to account the dependencies between those features.
 
-3. Provide a template for the linear modeling on the relationship between **belonging (dummy), relative position, and length** for a given feature of transcript region. The previous researches suggest that these 3 different properties of a region are important predictors for the behaviours of m6A in different biological context.
+3. Provide a template for the linear modeling on the relationship between **belonging (dummy), relative position, and length** for a given feature on transcript. The previous researches suggest that these 3 different properties of a region are important predictors for the behaviours of m6A in different biological context.
 
 **Logistic regression modeling** seems to be a reasonable computational technique here, since it can efficiently quantify the scientific and statistical significance for all the features, while adjust their dependencies on each others. The logistic regression is coupled with bayesian model selection method on genaralized linear model for reasons of reduced model qualities and inferential power in the presence of large amount of highly correlated features. 
 
