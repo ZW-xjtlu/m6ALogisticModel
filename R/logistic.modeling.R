@@ -282,7 +282,7 @@ Plot_df_Dev$lab_y_pos = 0
 for (i in 1:length(idx_sample)) {
   GOF <- read.csv(paste0(save_dir,"/",idx_sample[i],"/","Deviance_and_Dof.csv"))
   Plot_df_Dev$Deviance[i] <- GOF$Deviances[1]
-  Explained_deviance_i <- GOF$Deviances[2] - GOF$Deviances[1]
+  Explained_deviance_i <- max(0, GOF$Deviances[2] - GOF$Deviances[1])
   Plot_df_Dev$Deviance[i+length(idx_sample)] <- Explained_deviance_i
   Plot_df_Dev$Dof[i] <- paste0(GOF$Dof[2]-GOF$Dof[1])
   Plot_df_Dev$Dof[i+length(idx_sample)] <- GOF$Dof[1]
@@ -298,4 +298,5 @@ Gof <- ggplot(Plot_df_Dev,aes(x = Conditions, label = Dof)) +
 
 ggsave(paste0(save_dir,"/","Goodness-of-fit.pdf"), Gof, width = 1.8 + .5*length(idx_sample),height = 3.3)
 
+cat("Summary plots are generated.\n")
 }
