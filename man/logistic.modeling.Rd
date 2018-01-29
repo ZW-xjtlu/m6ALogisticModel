@@ -80,6 +80,10 @@ save_dir = "LogisticModel_x",
 sample_names_coldata = "ID"
 )
 
+#To Do:
+#1. make a option called "no model selection", to quikly infer the effect sizes.
+#2. Isolate the meta plot functions from the original ones.
+
 }
 \seealso{
 Use \code{\link{predictors.annot}} to annotate features.

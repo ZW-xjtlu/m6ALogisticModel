@@ -80,3 +80,43 @@ SE_example = SE_Learning
 
 setwd("/Users/zhenwei/Documents/GitHub/m6ALogisticModel")
 devtools::use_data(SE_example)
+
+METTL16_CLIP <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/More\ Modeling\ triles/METTL16_CLIP.rds")
+devtools::use_data(METTL16_CLIP)
+
+ALKBH5_PARCLIP <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/More\ Modeling\ triles/PARCLIP_ALKBH5.rds")
+devtools::use_data(ALKBH5_PARCLIP)
+
+FTO_CLIP <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/More\ Modeling\ triles/CLIP_FTO.rds")
+devtools::use_data(FTO_CLIP)
+
+FTO_eCLIP <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/More\ Modeling\ triles/eCLIP_FTO.rds")
+devtools::use_data(FTO_eCLIP)
+
+METTL3_TREW <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/More\ Modeling\ triles/METTL3_TREW_gr.rds")
+devtools::use_data(METTL3_TREW)
+
+METTL14_TREW <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/More\ Modeling\ triles/METTL14_TREW_gr.rds")
+devtools::use_data(METTL14_TREW)
+
+WTAP_TREW <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/More\ Modeling\ triles/WTAP_TREW_gr.rds")
+devtools::use_data(WTAP_TREW)
+
+
+
+group_list_expanded = list(
+  UTR5 = c("UTR5", "Pos_UTR5", "length_UTR5"),
+  CDS = c("CDS", "Pos_CDS", "length_CDS"),
+  UTR3 = c("UTR3", "Pos_UTR3", "length_UTR3"),
+  Exon = c("exons", "Pos_exons", "long_exon","Last_exons_50bp"),
+  Gene = c("Pos_Tx","length_gene_ex","length_gene_full","Isoform_num","sncRNA","lncRNA","HK_genes"),
+  LandMarks = c("m6Am","Start_codons","Stop_codons"),
+  Motif = c("AAACA","GAACA","AGACA","GGACA","AAACT","GAACT","AGACT","GGACT","AAACC","GAACC","AGACC","GGACC"),
+  Structure = c("struct_hybridize","struct_loop"),
+  Evolution = c("PC_1nt","PC_101nt","FC_1nt","FC_101nt"),
+  miRNA_RBP = c("HNRNPC_eCLIP", "YTHDC1_TREW", "YTHDF1_TREW", "YTHDF2_TREW", "miR_targeted_genes","TargetScan","Verified_miRtargets"),
+  Writers_Erasers = c("METTL3_TREW","METTL14_TREW","WTAP_TREW","METTL16_CLIP","ALKBH5_PARCLIP","FTO_CLIP","FTO_eCLIP"),
+  Batch = c("GC_cont_genes","GC_cont_101bp","Intercept")
+)
+
+devtools::use_data(group_list_expanded)

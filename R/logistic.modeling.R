@@ -62,12 +62,18 @@
 #' sample_names_coldata = "ID"
 #' )
 #'
+#' #To Do:
+#' #1. make a option called "no model selection", to quikly infer the effect sizes.
+#' #2. Isolate the meta plot functions from the original ones.
+#'
 #' @import GenomicRanges
 #' @import ggplot2
 #' @import SummarizedExperiment
 #' @import BAS
 #'
 #' @export
+#'
+#'
 #'
 
 logistic.modeling <- function(

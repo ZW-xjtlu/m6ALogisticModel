@@ -152,6 +152,9 @@
 #'
 #' mcols(SE_features_added) ###Check the generated feature matrix.
 #'
+#' #ToDo1 : add argument Reduce_GenomicFeature_Colinearity.
+#' #ToDo2: add argument Reduce_GenomicResponse_Dependency.
+#'
 #' @seealso \code{\link{logistic.modeling}} to perform model selection, statistics calculation, and visualization across multiple samples.
 #'
 #' @import BSgenome
