@@ -94,13 +94,13 @@ FTO_eCLIP <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/More\ Modeling\ 
 devtools::use_data(FTO_eCLIP)
 
 METTL3_TREW <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/More\ Modeling\ triles/METTL3_TREW_gr.rds")
-devtools::use_data(METTL3_TREW)
+devtools::use_data(METTL3_TREW,overwrite = TRUE)
 
 METTL14_TREW <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/More\ Modeling\ triles/METTL14_TREW_gr.rds")
-devtools::use_data(METTL14_TREW)
+devtools::use_data(METTL14_TREW,overwrite = TRUE)
 
 WTAP_TREW <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/More\ Modeling\ triles/WTAP_TREW_gr.rds")
-devtools::use_data(WTAP_TREW)
+devtools::use_data(WTAP_TREW,overwrite = TRUE)
 
 
 
