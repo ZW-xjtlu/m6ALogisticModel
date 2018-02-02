@@ -182,7 +182,7 @@ exs_txdb <- exons(txdb)
 Stop_codons <- resize( cds(txdb) , 1, fix = "end" )
 Start_codons <- resize( cds(txdb) , 1, fix = "start" )
 TSS <- resize(transcripts(txdb),1,fix = "start")
-A_idx <- vcountPattern("A", DNAStringSet( Views(Hsapiens, TSS))) > 0
+A_idx <- vcountPattern("A", DNAStringSet( Views(bsgnm, TSS))) > 0
 UTR3 <- threeUTRsByTranscript(txdb)
 UTR5 <- fiveUTRsByTranscript(txdb)
 CDS <- cdsBy(txdb,by = "tx")
@@ -355,7 +355,7 @@ if (any( width(row_gr) != 1 )) {
 }else{
 
 is_motif <- function(motif,dss,exact = T) vcountPattern(DNAString(motif), dss, fixed = exact) > 0
-DSS <- DNAStringSet( Views(Hsapiens,row_gr + 2) )
+DSS <- DNAStringSet( Views(bsgnm,row_gr + 2) )
 
 for (m_i in motif)  {
 Feature_matrix[[m_i]] <- is_motif(m_i,DSS,T)
@@ -468,7 +468,7 @@ if(!is.null(HK_genes_list)){
  #
  # - GC_cont_genes: GC content of each gene.
 exbg_gr <- unlist(exbg_txdb)
-exs_GC_freq <-  letterFrequency( DNAStringSet( Views(Hsapiens, exbg_gr) ) , letters="CG")
+exs_GC_freq <-  letterFrequency( DNAStringSet( Views(bsgnm, exbg_gr) ) , letters="CG")
 Genes_GC_freq <- tapply( exs_GC_freq, names(exbg_gr), sum )
 Genes_length <- tapply( width(exbg_gr), names(exbg_gr), sum )
 Genes_GC_cont = Genes_GC_freq/Genes_length
@@ -483,7 +483,7 @@ i  = Speak("Gene level GC content z score",i)
 
  # - GC_cont_101bp: GC content of 101bp local region of the sites.
 
-Feature_matrix$GC_cont_101bp <- as.numeric( letterFrequency( DNAStringSet( Views(Hsapiens,row_gr+50) ) , letters="CG", as.prob = T) )
+Feature_matrix$GC_cont_101bp <- as.numeric( letterFrequency( DNAStringSet( Views(bsgnm,row_gr+50) ) , letters="CG", as.prob = T) )
 
 Feature_matrix$GC_cont_101bp <- (Feature_matrix$GC_cont_101bp - mean(Feature_matrix$GC_cont_101bp))/sd(Feature_matrix$GC_cont_101bp)
 
