@@ -4,7 +4,7 @@
 \name{group_list_expanded}
 \alias{group_list_expanded}
 \title{An alternative group list}
-\format{A List object:}
+\format{A List object.}
 \usage{
 library(SummarizedExperiment)
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
@@ -51,6 +51,8 @@ group_list = group_list_expanded
 }
 \description{
 Defined by the following Code:
+}
+\details{
 group_list_expanded = list(
 UTR5 = c("UTR5", "Pos_UTR5", "length_UTR5"),
 CDS = c("CDS", "Pos_CDS", "length_CDS"),
@@ -65,8 +67,7 @@ miRNA_RBP = c("HNRNPC_eCLIP", "YTHDC1_TREW", "YTHDF1_TREW", "YTHDF2_TREW", "miR_
 Writers_Erasers = c("METTL3_TREW","METTL14_TREW","WTAP_TREW","METTL16_CLIP","ALKBH5_PARCLIP","FTO_CLIP","FTO_eCLIP"),
 Batch = c("GC_cont_genes","GC_cont_101bp","Intercept")
 )
-}
-\details{
+
 The list include an extra module called Writers_Erasers compared with \Code{group_list_default}, these data are published CLIP datasets of m6A writers and erasers.
 }
 \note{

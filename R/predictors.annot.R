@@ -406,6 +406,7 @@ if(!is.null(fc)) {
   i  = Speak("fitness consequences scores 101nt >= 0.6",i)
 }
 
+if(is.null(struct_hybridize)) {} else {
 
  Feature_matrix$struct_hybridize <- row_gr%over%struct_hybridize
 
@@ -414,7 +415,7 @@ if(!is.null(fc)) {
  Feature_matrix$struct_loop <- row_gr%over%Infer_loop( struct_hybridize )
 
  i  = Speak("RNA structure --- inferred loop structures between hybridized region",i)
-
+}
  #
  #   ###6. User specified features by argument \code{feature_lst}###
  #
