@@ -1,7 +1,7 @@
 Package: m6ALogisticModel
 Type: Package
 Title: Generate RNA modification predictors and fit logistic regression models with BAS model selection.
-Version: 0.1.0
+Version: 0.5.0
 Author: Zhen Wei
 Maintainer: The package maintainer <zhen.wei10@icloud.com>
 Description: Motivation to use logistic model: the transcript features are usually confounded with each other.Example 1. TSSA and start codon.Example 2. Start of the last exon and stop codon.Example 3. Long exons and stop codons.Example 4. Long exons and long genes.Example 5. GC content, structure, and transcript start.So this package is designed to extract predictors and run logistic regression model with the commonly mentioned but confounded transcript annotations.

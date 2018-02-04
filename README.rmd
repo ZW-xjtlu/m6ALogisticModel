@@ -192,6 +192,8 @@ m6ALogisticModel::logistic.modeling(SE,
                                     MCMC_iterations = 100000)
 ```
 
+![Effect size](./effectsize-bar.pdf)
+
 <hr/>
 
 ```{r}

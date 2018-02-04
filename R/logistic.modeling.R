@@ -64,7 +64,9 @@
 #'
 #' #To Do:
 #' #1. make a option called "no model selection", to quikly infer the effect sizes.
+#' #1.5 make the response variable could be TRUE or FALSE for logistic model.
 #' #2. Isolate the meta plot functions from the original ones.
+#' #3. Add choice of Poisson GLM and Gaussian OLM.
 #'
 #' @import GenomicRanges
 #' @import ggplot2
