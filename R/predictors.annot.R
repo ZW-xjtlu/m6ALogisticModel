@@ -154,10 +154,14 @@
 #'
 #' #ToDo1 : add argument Reduce_GenomicFeature_Colinearity.
 #' #ToDo2: add argument Reduce_GenomicResponse_Dependency.
+#' #ToDo3: the sample_names_coldata is very very confusing.
+#' #ToDo4: must support the input format of matrix and TRUE/FALSE for logistic regression.
+#' #ToDo5: Response could be ordinary, binomial, and poisson.
 #'
 #' @seealso \code{\link{logistic.modeling}} to perform model selection, statistics calculation, and visualization across multiple samples.
 #'
 #' @import BSgenome
+#' @import Biostrings
 #' @import GenomicFeatures
 #' @import GenomicRanges
 #' @import SummarizedExperiment

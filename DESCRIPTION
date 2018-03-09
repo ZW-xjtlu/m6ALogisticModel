@@ -9,6 +9,7 @@ License: What license is it under?
 Imports: BAS,
     readr,
     BSgenome,
+    Biostrings,
     GenomicFeatures,
     GenomicRanges,
     SummarizedExperiment,
