@@ -1,4 +1,4 @@
-User guide for package m6ALogisticModel
+User guide for package RNAglm
 ================
 
 Installation
@@ -14,17 +14,23 @@ devtools::install_github("ZhenWei10/m6ALogisticModel")
 Motivation
 ----------
 
-The major reasons for me to create this package are:
+The major purposes to create this package are:
 
-1.  Deal with **confounding genomic features** that are common in RNA genomics.
+1. Facilitate the data mining process on RNA level high-throughput data, while being able to deal with **confounding transcriptomic features** that are common in RNA genomics.
 
-2.  Reduce the traditional work load for creating and screening the highly explanatory RNA features one by one, while unable to account the dependencies between those features.
+2. Automatically generate features given bioconductor annotation files, this could reduce the traditional work load for creating and screening the highly significant RNA features one by one, while unable to account the dependencies between those features.
 
-3.  Provide a template for the linear modeling on the relationship between **belonging (dummy), relative position, and length** for a given feature on transcript. The previous researches suggest that these 3 different properties of a region are important predictors for the behaviours of m6A in different biological context.
+3.  Provide a template for the insightful linear modeling on the relationship between **belonging (dummy), relative position, and length** for a given region of a transcript. For example, the previous researches suggest that exon length, relative position on 3'UTR, and stop codons are important predictors for the presence of m6A mRNA modification under different biological contexts.
 
-**Logistic regression modeling** seems to be a reasonable computational technique here, since it can efficiently quantify the scientific and statistical significance for all the features, while adjust their dependencies on each others. The logistic regression is coupled with bayesian model selection on genaralized linear model for reasons of reduced model predictability and robustness in the presence of large number of highly correlated features (high collinearity). Also, model selection method can yield highly interpretable results at the same time making the estimators unbiased.
+We will build the following design for a given transcript region to improve the topological insight gained on that region:
+Belong_Region_X + Belong_Region_X::Length_Region_X + Belong_Region_X::Position_Region_X
 
-The funcions for the transcript feature annotation and the logistic modeling are included in this package; while at the same time, users can introduce more genomic features defined by them self using GRanges object. Effective visualization for comparation between multiple selected models are also implemented in this package.
+
+**Generalized linear model** is a computational technique used here; it can efficiently quantify the scientific and statistical significance for all the features, while adjust their dependencies on each others. Also, the generalized linear model can be applied on the transcriptomic data with different data forms (e.x. real valued, binary, and counts). 
+
+Finally, the generalized linear modeling is coupled with model selection methods to reduce the potential negative effects in presence of large numbers of highly correlated features (high collinearity). Also, model selection can yield robust coefficient estimates that can generate reliable biological interpretations.
+
+The funcions for the transcript feature annotation and the generalized linear modeling are included in this package; while at the same time, users can introduce more genomic features defined by them self using GRanges object. Effective visualization for comparations between multiple models are also implemented in this package.
 
 <hr/>
 A case study with this package.
