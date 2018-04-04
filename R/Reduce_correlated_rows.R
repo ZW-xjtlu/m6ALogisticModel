@@ -1,25 +1,25 @@
-#' @title Subset the rows/genomic features that are close on genomic coordinate to reduce the row dependencies.
+#' @title Subset the rows/genomic features that are close on genomic coordinate to reduce the dependencies between rows.
 #'
 #' @description \code{Reduce_correlated_rows} is a function to define a set of metrics to subset the rows that are highly correlated with its nearby features on genomic scale.
 #' @param SE A \code{SummarizedExperiment} with rowRanges being the GRanges of row feaures, and an assay matrix with at least one collumn.
 #' @param cor_method The method to define correlations between rows of the assay matrix, can be one in "spearman", "pearson".
-#' @param cor_cut_off The correlation cut_off to reduce 2 nearby rows, default is 0.8.
+#' @param cor_cut_off The correlation cut off threshold used to group 2 nearby rows, default is 0.8.
 #' @param bin_width The bin width to define the closed/neighbooring row features, default is 101.
-#' @param reduction_method The decision criteria on the highly correlated rows:
+#' @param reduction_method The decision criteria for the grouped correlated rows:
 #'
-#' "maxSum" : keep the closed and correlated row features with highest row sums.
+#' "maxSum" : keep the closed and correlated row features with the highest row sums.
 #'
-#' "maxMad" : keep the closed and correlated row features with highest row variance.
+#' "maxMad" : keep the closed and correlated row features with the highest row Median Absolute Deviation.
 #'
 #' "maxInfo": keep the closed and correlated row features with highest row total information defined by \code{information_matrix}.
 #'
-#' "Random": keep one of the closed and correlated row features randomly.
+#' "Random": keep one of the correlated row features randomly.
 #'
 #' @param information_matrix Wheather to return the clustering index, default is FASLE.
 #'
-#' @details The correlation values between closed rows are caculated, if the rows are mutually correlated neighboors, only one of them will be kept by the metric defined obove.
+#' @details The correlation between closed row features are caculated, the rows have mutually correlated neighboors are grouped together, only one of the member in the group will be kept using one of the metric defined obove.
 #'
-#' @return The output is a \code{SummarizedExperiment} with subsetted rows compared with the input.
+#' @return The output is a \code{SummarizedExperiment} object with subsetted rows compared with the input.
 #'
 #' @examples
 #' Reduce_correlated_rows(SE_CQN,"spearman",".7",101,"maxInfo",assays(SE_CQN)$IP + assays(SE_CQN)$input)
