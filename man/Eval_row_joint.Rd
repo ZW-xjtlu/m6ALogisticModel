@@ -4,7 +4,8 @@
 \alias{Eval_row_joint}
 \title{Evaluate the joint distribution between rows of a genomic assay.}
 \usage{
-Eval_row_joint(SE, HDER = "Row_joint", K = 3, ROW_STAND = T)
+Eval_row_joint(SE, HDER = "Row_joint", K = 3, ROW_STAND = T,
+  RETURN_INDX = F)
 }
 \arguments{
 \item{SE}{A \code{SummarizedExperiment} with features annotated by \code{\link{predictors.annot}}, the colnames of the SummarizedExperiment should be sample names.}
@@ -14,6 +15,8 @@ Eval_row_joint(SE, HDER = "Row_joint", K = 3, ROW_STAND = T)
 \item{K}{The number of centers used in K medoids clustering.}
 
 \item{ROW_STAND}{Wheather standardize rows before clustering, default is TRUE.}
+
+\item{RETURN_INDX}{Wheather to return the clustering index, default is FASLE.}
 }
 \value{
 Plots saved under a directory named by \code{HDER}.

@@ -5,6 +5,7 @@
 #' @param HDER The subtitle and the file name of the plot.
 #' @param K The number of centers used in K medoids clustering.
 #' @param ROW_STAND Wheather standardize rows before clustering, default is TRUE.
+#' @param RETURN_INDX Wheather to return the clustering index, default is FASLE.
 #'
 #' @details By default, a K medoids clustering will be applied between rescaled row entires with metric of euclidean; then, a simplified heat map will be plotted.
 #' Finally, a report by multinomial GLM is conducted using the clustering label and features.
@@ -78,9 +79,10 @@
 #' @import ggplot2
 #' @import cluster
 #' @import nnet
+#' @import SummarizedExperiment
 #' @importFrom reshape2 melt
 #' @export
-Eval_row_joint <- function(SE, HDER = "Row_joint", K = 3, ROW_STAND = T) {
+Eval_row_joint <- function(SE, HDER = "Row_joint", K = 3, ROW_STAND = T, RETURN_INDX = F) {
 stopifnot(class(SE)=="RangedSummarizedExperiment")
 stopifnot(!is.null(mcols(SE)))
 #Cluster: K-means
@@ -161,9 +163,18 @@ Plot_df$Sign[Plot_df$values < 0] = "negative"
 Plot_df$Group = paste0(Plot_df$Statistics,":",Plot_df$Clusters)
 Indx_Group = unique(Plot_df$Group)
 
+n = length(Indx_Group)
+indx <- 1:n
+for(i in 1:n){
+  if(i%%2 != 0)  {
+    indx[i] = (i%%2 + i)/2
+  }else{
+    indx[i] =  n/2  + i/2
+  }
+}
+
 Plot_df$Group = factor( Plot_df$Group,
-                                levels = c(Indx_Group[seq(1,length(Indx_Group)-1,by= K-1)],
-                                           Indx_Group[seq(2,length(Indx_Group),by= K-1)]) )
+                                levels = Indx_Group[indx] )
 
 Z = Plot_df$values[Plot_df$Statistics == "Wald_Z"]
 
@@ -202,5 +213,9 @@ Stat_df$Reduced_prop = 1 - Stat_df$Residual_Deviance/Stat_df$NULL_Deviance
 Stat_df$Cost_df = length(Indx) * (K-1) - 1
 Stat_df$Chisq_stat = Stat_df$NULL_Deviance - Stat_df$Residual_Deviance
 write.table(t(Stat_df),paste0("Model_report_",HDER,".txt"),col.names = F)
+
+if(RETURN_INDX){
+  return(row_cluster$clustering)
+}
 }
 

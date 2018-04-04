@@ -193,6 +193,10 @@ m6ALogisticModel::logistic.modeling(SE,
                                     MCMC_iterations = 100000)
 ```
 
+- ToDo:
+add features related to: intron.
+add features related to: SB based technique/MeRIP based technique.
+
 <hr/>
 ``` r
 sessionInfo()
