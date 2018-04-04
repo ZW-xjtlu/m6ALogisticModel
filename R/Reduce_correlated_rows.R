@@ -13,9 +13,9 @@
 #'
 #' "maxInfo": keep the closed and correlated row features with highest row total information defined by \code{information_matrix}.
 #'
-#' "Random": keep one of the correlated row features randomly.
+#' "random": keep one of the correlated row features randomly.
 #'
-#' @param information_matrix Wheather to return the clustering index, default is FASLE.
+#' @param information_matrix The information matrix for argument \code{reduction_method} = "maxInfo".
 #'
 #' @details The correlation between closed row features are caculated, the rows have mutually correlated neighboors are grouped together, only one of the member in the group will be kept using one of the metric defined obove.
 #'
@@ -35,7 +35,8 @@ Reduce_correlated_rows <- function(SE,
                                    information_matrix = NULL) {
 
 stopifnot(cor_method %in% c("spearman","pearson"))
-stopifnot(reduction_method %in% c("maxSum","maxMad","maxInfo","Random"))
+stopifnot(reduction_method %in% c("maxSum","maxMad","maxInfo","random"))
+stopifnot(is.numeric(cor_cut_off))
 
 bin <- resize( rowRanges(SE) , bin_width )
 mcols(bin) = NULL
@@ -105,7 +106,7 @@ func_decision <- function(df){
 
 Keep_row_indx <- unlist(sapply(bin_lst,func_decision))
 
-message(paste0( nrow(SE) - length(Keep_row_indx) , " rows are dropped at this step.") )
+message(paste0( nrow(SE) - length(Keep_row_indx) , " rows are dropped.") )
 
 return(SE[Keep_row_indx,])
 }
