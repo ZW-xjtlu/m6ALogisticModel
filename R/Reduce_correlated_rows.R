@@ -9,7 +9,7 @@
 #'
 #' "maxSum" : keep the closed and correlated row features with highest row sums.
 #'
-#' "maxVar" : keep the closed and correlated row features with highest row variance.
+#' "maxMad" : keep the closed and correlated row features with highest row variance.
 #'
 #' "maxInfo": keep the closed and correlated row features with highest row total information defined by \code{information_matrix}.
 #'
@@ -25,6 +25,7 @@
 #' Reduce_correlated_rows(SE_CQN,"spearman",".7",101,"maxInfo",assays(SE_CQN)$IP + assays(SE_CQN)$input)
 #'
 #' @import SummarizedExperiment
+#' @export
 
 Reduce_correlated_rows <- function(SE,
                                    cor_method = "spearman",
@@ -34,7 +35,7 @@ Reduce_correlated_rows <- function(SE,
                                    information_matrix = NULL) {
 
 stopifnot(cor_method %in% c("spearman","pearson"))
-stopifnot(reduction_method %in% c("maxSum","maxVar","maxInfo","Random"))
+stopifnot(reduction_method %in% c("maxSum","maxMad","maxInfo","Random"))
 
 bin <- resize( rowRanges(SE) , bin_width )
 mcols(bin) = NULL
@@ -84,8 +85,8 @@ func_decision <- function(df){
   if(reduction_method  == "maxSum"){
     return(x[ which.max( rowSums( x[,-1*ncol(x)]  ,na.rm = T)),"idx"])
   }
-  if(reduction_method == "maxVar"){
-    return(x[ which.max( rowVars( x[,-1*ncol(x)]  ,na.rm = T)),"idx"])
+  if(reduction_method == "maxMad"){
+    return(x[ which.max( rowMads( as.matrix(x[,-1*ncol(x)])  ,na.rm = T)),"idx"])
   }
   if(reduction_method == "maxInfo"){
     return(x[ which.max( rowSums( information_matrix[x[,ncol(x)],]  ,na.rm = T)),"idx"])
@@ -103,6 +104,8 @@ func_decision <- function(df){
 
 
 Keep_row_indx <- unlist(sapply(bin_lst,func_decision))
+
+message(paste0( nrow(SE) - length(Keep_row_indx) , " rows are dropped at this step.") )
 
 return(SE[Keep_row_indx,])
 }

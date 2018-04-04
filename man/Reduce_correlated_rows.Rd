@@ -20,7 +20,7 @@ Reduce_correlated_rows(SE, cor_method = "spearman", cor_cut_off = 0.8,
 
 "maxSum" : keep the closed and correlated row features with highest row sums.
 
-"maxVar" : keep the closed and correlated row features with highest row variance.
+"maxMad" : keep the closed and correlated row features with highest row variance.
 
 "maxInfo": keep the closed and correlated row features with highest row total information defined by \code{information_matrix}.
 
