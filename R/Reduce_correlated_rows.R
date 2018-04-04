@@ -51,7 +51,7 @@ bin_lst <- split(bingroup[,-1],bingroup[,1])
 func_cor <- function(df){
   if(dim(df)[1] == 1) return(0) else {
     idx <- which(!colnames(df) %in% c("modstart","modName","geneName","geneType","gene_id","idx"))
-    spearman_M <- cor(t(df[,idx]),method = cor_method)
+    spearman_M <- cor(na.omit(t(df[,idx])),method = cor_method)
     idx_M <- spearman_M > cor_cut_off
     idx_c <- combn(1:dim(idx_M)[1],2)
     idx_v <- idx_M[t(idx_c)]
