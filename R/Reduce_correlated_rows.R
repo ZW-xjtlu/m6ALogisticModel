@@ -2,7 +2,7 @@
 #'
 #' @description \code{Reduce_correlated_rows} is a function to define a set of metrics to subset the rows that are highly correlated with its nearby features on genomic scale.
 #' @param SE A \code{SummarizedExperiment} with rowRanges being the GRanges of row feaures, and an assay matrix with at least one collumn.
-#' @param cor_method The method to define correlations between rows of the assay matrix, can be one in "spearman", "pearson".
+#' @param cor_method The method to define correlations between rows of the assay matrix, can be one in "spearman" and "pearson".
 #' @param cor_cut_off The correlation cut off threshold used to group 2 nearby rows, default is 0.8.
 #' @param bin_width The bin width to define the closed/neighbooring row features, default is 101.
 #' @param reduction_method The decision criteria for the grouped correlated rows:
@@ -15,7 +15,7 @@
 #'
 #' "random": keep one of the correlated row features randomly.
 #'
-#' @param information_matrix The information matrix for argument \code{reduction_method} = "maxInfo".
+#' @param information_matrix The information matrix used when argument \code{reduction_method} = "maxInfo".
 #'
 #' @details The correlation between closed row features are caculated, the rows have mutually correlated neighboors are grouped together, only one of the member in the group will be kept using one of the metric defined obove.
 #'
@@ -90,7 +90,7 @@ func_decision <- function(df){
     return(x[ which.max( rowMads( as.matrix(x[,-1*ncol(x)])  ,na.rm = T)),"idx"])
   }
   if(reduction_method == "maxInfo"){
-    return(x[ which.max( rowSums( information_matrix[x[,ncol(x)],]  ,na.rm = T)),"idx"])
+    return(x[ which.max( rowSums( cbind( information_matrix[x[,ncol(x)],])  ,na.rm = T)),"idx"])
   }
   if(reduction_method == "Random"){
     return(sample(x[,ncol(x)],1))

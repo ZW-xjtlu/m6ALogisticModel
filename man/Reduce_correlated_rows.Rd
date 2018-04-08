@@ -10,7 +10,7 @@ Reduce_correlated_rows(SE, cor_method = "spearman", cor_cut_off = 0.8,
 \arguments{
 \item{SE}{A \code{SummarizedExperiment} with rowRanges being the GRanges of row feaures, and an assay matrix with at least one collumn.}
 
-\item{cor_method}{The method to define correlations between rows of the assay matrix, can be one in "spearman", "pearson".}
+\item{cor_method}{The method to define correlations between rows of the assay matrix, can be one in "spearman" and "pearson".}
 
 \item{cor_cut_off}{The correlation cut off threshold used to group 2 nearby rows, default is 0.8.}
 
@@ -24,9 +24,9 @@ Reduce_correlated_rows(SE, cor_method = "spearman", cor_cut_off = 0.8,
 
 "maxInfo": keep the closed and correlated row features with highest row total information defined by \code{information_matrix}.
 
-"Random": keep one of the correlated row features randomly.}
+"random": keep one of the correlated row features randomly.}
 
-\item{information_matrix}{Wheather to return the clustering index, default is FASLE.}
+\item{information_matrix}{The information matrix used when argument \code{reduction_method} = "maxInfo".}
 }
 \value{
 The output is a \code{SummarizedExperiment} object with subsetted rows compared with the input.
