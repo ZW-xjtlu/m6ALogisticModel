@@ -172,6 +172,23 @@ mcols(SE_features_added) ###Check the generated feature matrix.
 #ToDo4: must support the input format of matrix and TRUE/FALSE for logistic regression.
 #ToDo5: Response could be ordinary, binomial, and poisson.
 
+#Fetures need to change into....
+1. change fc and pc into z scores.
+2. change last exon 50 bp into last exon relative position centered at 0.
+3. transcript that stop codon falls in the last exons.
+3. add last exon dummy.
+4. add relative exonic rank 0-1.
+5. add introns.
+6. add relative intronic positions.
+7. add relative intronic rank 0-1.
+8. add splicing junction 5' 50bp exons
+9. add splicing junction 3' 50bp exons
+10. add splicing junction 5' 50bp introns.
+11. add splicing junction 3' 50bp introns.
+12. add all relative positions in MAD standardized absolute bp 5' end, absolute bp 3' end.
+
+add another 30 features.
+
 }
 \seealso{
 \code{\link{logistic.modeling}} to perform model selection, statistics calculation, and visualization across multiple samples.

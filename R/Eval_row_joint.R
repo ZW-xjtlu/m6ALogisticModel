@@ -6,6 +6,8 @@
 #' @param K The number of centers used in K medoids clustering.
 #' @param ROW_STAND Wheather standardize rows before clustering, default is TRUE.
 #' @param RETURN_INDX Wheather to return the clustering index, default is FASLE.
+#' @param PROVIDE_INDX An optional index for your own clustering result, the k means clustering plot will be omited if you provide it.
+#'
 #'
 #' @details By default, a K medoids clustering will be applied between rescaled row entires with metric of euclidean; then, a simplified heat map will be plotted.
 #' Finally, a report by multinomial GLM is conducted using the clustering label and features.
@@ -82,10 +84,13 @@
 #' @import SummarizedExperiment
 #' @importFrom reshape2 melt
 #' @export
-Eval_row_joint <- function(SE, HDER = "Row_joint", K = 3, ROW_STAND = T, RETURN_INDX = F) {
+Eval_row_joint <- function(SE, HDER = "Row_joint", K = 3, ROW_STAND = T, RETURN_INDX = F, PROVIDE_INDX = NULL) {
 stopifnot(class(SE)=="RangedSummarizedExperiment")
 stopifnot(!is.null(mcols(SE)))
+stopifnot(is.null(PROVIDE_INDX) | (length(PROVIDE_INDX) == nrow(SE)))
 #Cluster: K-means
+
+if(is.null(PROVIDE_INDX)) {
 
 if(ROW_STAND){
 assay_M <- t(scale(t(assay(SE))))
@@ -122,10 +127,16 @@ fig_height_p1 = 3.4 + .3*K + .05 * max(nchar(as.character(colnames(SE))))
 fig_width_p1 = 4 + .2 * ncol(SE)
 ggsave(paste0(HDER,"_kmedoids.pdf"),p1,width = fig_width_p1,height = fig_height_p1)
 
+}
 #Fit multinomial GLM to analysis the clustering label
 GLM_df = mcols(SE)
+
+if(is.null(PROVIDE_INDX)) {
 GLM_df$Y = factor( paste0("Cluster ",row_cluster$clustering) )
 GLM_df$Y = relevel(GLM_df$Y, "Cluster 1")
+} else {
+GLM_df$Y =  PROVIDE_INDX
+}
 Null_model <-  multinom(Y ~ 1, data = GLM_df)
 Proposed_model <-  multinom(Y ~ ., data = GLM_df)
 stat_test <- summary(Proposed_model)

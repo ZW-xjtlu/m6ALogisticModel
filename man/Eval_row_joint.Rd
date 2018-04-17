@@ -5,7 +5,7 @@
 \title{Evaluate the joint distribution between rows of a genomic assay.}
 \usage{
 Eval_row_joint(SE, HDER = "Row_joint", K = 3, ROW_STAND = T,
-  RETURN_INDX = F)
+  RETURN_INDX = F, PROVIDE_INDX = NULL)
 }
 \arguments{
 \item{SE}{A \code{SummarizedExperiment} with features annotated by \code{\link{predictors.annot}}, the colnames of the SummarizedExperiment should be sample names.}
@@ -17,6 +17,8 @@ Eval_row_joint(SE, HDER = "Row_joint", K = 3, ROW_STAND = T,
 \item{ROW_STAND}{Wheather standardize rows before clustering, default is TRUE.}
 
 \item{RETURN_INDX}{Wheather to return the clustering index, default is FASLE.}
+
+\item{PROVIDE_INDX}{An optional index for your own clustering result, the k means clustering plot will be omited if you provide it.}
 }
 \value{
 Plots saved under a directory named by \code{HDER}.
