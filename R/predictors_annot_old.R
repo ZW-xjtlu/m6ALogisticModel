@@ -1,6 +1,6 @@
 #' @title Generate predictors/features for a range based RNA modification data.
 #'
-#' @description \code{predictors.annot} is used to generate features given a \code{SummarizedExperiment} object of RNA modification / target.
+#' @description \code{predictors_annot_old} is used to generate features given a \code{SummarizedExperiment} object of RNA modification / target.
 #'
 #' @details This function retreave transcript related features that are previous known to be related with m6A modifications based on
 #' provided \code{rowRanges} of the \code{SummarizedExperiment},
@@ -141,7 +141,7 @@
 #' Verified_miRtargets = verified_targets_gr
 #' )
 #'
-#' SE_features_added <- predictors.annot(se = SE_example,
+#' SE_features_added <- predictors_annot_old(se = SE_example,
 #'                        txdb = TxDb.Hsapiens.UCSC.hg19.knownGene,
 #'                          bsgnm = Hsapiens,
 #'                            fc = fitCons.UCSC.hg19,
@@ -186,7 +186,7 @@
 #' @export
 
 
-predictors.annot <- function(se,
+predictors_annot_old <- function(se,
                              txdb,
                              bsgnm,
                              fc = NULL,
@@ -267,7 +267,7 @@ i  = Speak("Start 50bp of the last exon",i)
  #
  # - Pos_UTR5: Relative positioning on 5'UTR.
 
-Feature_matrix$Pos_UTR5 <- Relative_Pos_map(row_gr,UTR5,0)
+Feature_matrix$Pos_UTR5 <- relative_pos_map(row_gr,UTR5,0)
 
 i  = Speak("relative positioning on 5'utr",i)
 
@@ -275,13 +275,13 @@ i  = Speak("relative positioning on 5'utr",i)
  # - Pos_UTR3: Relative positioning on 3'UTR.
  #
 
-Feature_matrix$Pos_UTR3 <- Relative_Pos_map(row_gr,UTR3,0)
+Feature_matrix$Pos_UTR3 <- relative_pos_map(row_gr,UTR3,0)
 
 i  = Speak("relative positioning on 3'utr",i)
 
  # - Pos_CDS: Relative positioning on Coding Sequence.
 
-Feature_matrix$Pos_CDS <- Relative_Pos_map(row_gr,CDS,0)
+Feature_matrix$Pos_CDS <- relative_pos_map(row_gr,CDS,0)
 
 i  = Speak("relative positioning on cds",i)
 
@@ -291,7 +291,7 @@ i  = Speak("relative positioning on cds",i)
  # - Pos_exons: Relative positioning on exons.
 
 exs_grl <- GenomicRanges::split(exs_txdb,1:length(exs_txdb))
-Feature_matrix$Pos_exons <- Relative_Pos_map(row_gr,exs_grl,0)
+Feature_matrix$Pos_exons <- relative_pos_map(row_gr,exs_grl,0)
 i  = Speak("relative positioning on exon",i)
 
  #
@@ -299,7 +299,7 @@ i  = Speak("relative positioning on exon",i)
  #
  # - long_UTR3: Long 3'UTR (length > 400bp).
 
-Feature_matrix$length_UTR3 <- Properties_map(query_gr = row_gr,
+Feature_matrix$length_UTR3 <- properties_map(query_gr = row_gr,
                                                 feature_gr = UTR3,
                                                 feature_properties = sum(width(UTR3)),
                                                 no_map_val = NA,
@@ -309,7 +309,7 @@ Feature_matrix$length_UTR3[is.na(Feature_matrix$length_UTR3)] = 0
 
 i  = Speak("3'UTR length (z-score) ",i)
 
-Feature_matrix$length_UTR5 <- Properties_map(query_gr = row_gr,
+Feature_matrix$length_UTR5 <- properties_map(query_gr = row_gr,
                                              feature_gr = UTR5,
                                              feature_properties = sum(width(UTR5)),
                                              no_map_val = NA,
@@ -319,7 +319,7 @@ Feature_matrix$length_UTR5[is.na(Feature_matrix$length_UTR5)] = 0
 
 i  = Speak("5'UTR length (z-score) ",i)
 
-Feature_matrix$length_CDS <- Properties_map(query_gr = row_gr,
+Feature_matrix$length_CDS <- properties_map(query_gr = row_gr,
                                              feature_gr = CDS,
                                              feature_properties = sum(width(CDS)),
                                              no_map_val = NA,
@@ -340,7 +340,7 @@ i  = Speak("Long exon (length > 400bp)",i)
  # - Gene_length_ex: standardized gene length of exonic regions (z score).
  #
 
-Feature_matrix$length_gene_ex <- Properties_map(query_gr = row_gr,
+Feature_matrix$length_gene_ex <- properties_map(query_gr = row_gr,
                                                  feature_gr = exbg_txdb,
                                                  feature_properties = sum(width(exbg_txdb)),
                                                  no_map_val = NA,
@@ -355,7 +355,7 @@ i  = Speak("gene length-exons (z-score)",i)
  #
  #
 
-Feature_matrix$length_gene_full <-  Properties_map(query_gr = row_gr,
+Feature_matrix$length_gene_full <-  properties_map(query_gr = row_gr,
                                                                 feature_gr = genes_txdb,
                                                                 feature_properties = width(genes_txdb),
                                                      no_map_val = NA,
@@ -434,7 +434,7 @@ if(is.null(struct_hybridize)) {} else {
 
  i  = Speak("RNA structure --- predicted hybridized region",i)
 
- Feature_matrix$struct_loop <- row_gr%over%Infer_loop( struct_hybridize )
+ Feature_matrix$struct_loop <- row_gr%over%infer_loop( struct_hybridize )
 
  i  = Speak("RNA structure --- inferred loop structures between hybridized region",i)
 }
@@ -471,7 +471,7 @@ i  = Speak("lnc RNA (> 200bp)",i)
  #
 
 txbygenes <- transcriptsBy(txdb,by = "gene")
-Feature_matrix$Isoform_num <- Properties_map(query_gr = row_gr,
+Feature_matrix$Isoform_num <- properties_map(query_gr = row_gr,
                                               feature_gr = txbygenes,
                                               feature_properties =  pmin( elementNROWS(txbygenes), 20),
                                               no_map_val = 0,
@@ -496,7 +496,7 @@ Genes_GC_freq <- tapply( exs_GC_freq, names(exbg_gr), sum )
 Genes_length <- tapply( width(exbg_gr), names(exbg_gr), sum )
 Genes_GC_cont = Genes_GC_freq/Genes_length
 
-Feature_matrix$GC_cont_genes <- Properties_map(query_gr = row_gr,
+Feature_matrix$GC_cont_genes <- properties_map(query_gr = row_gr,
                                                 feature_gr = exbg_txdb,
                                                 feature_properties = Genes_GC_cont,
                                                 no_map_val = .5,

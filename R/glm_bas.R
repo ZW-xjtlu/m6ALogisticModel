@@ -1,9 +1,9 @@
 #' @title Conduct bayesian model selection, inference, and visualization for logistic regression modeling.
 #'
-#' @description \code{logistic.modeling} is used to perform logistic regression analysis based on previously generated features, it reports logistic regression statistics after bayesian model selection,
+#' @description \code{glm_bas} is used to perform logistic regression analysis based on previously generated features, it reports logistic regression statistics after bayesian model selection,
 #' and it can plot diagrams of logit estimates, wald test / likelihood ratio test statistics, and the goodness of fit (deviance) across various samples.
 #'
-#' @details \code{logistic.modeling} build logistic regression model on the features and targets defined by the annotated \code{\link{SummarizedExperiment}} object returned by \code{\link{predictors.annot}}. The model selection is conducted by bayesian model selection method defined by the package \code{\link{BAS}}.
+#' @details \code{glm_bas} build logistic regression model on the features and targets defined by the annotated \code{\link{SummarizedExperiment}} object returned by \code{\link{predictors.annot}}. The model selection is conducted by bayesian model selection method defined by the package \code{\link{BAS}}.
 #'
 #' @param se A \code{\link{SummarizedExperiment}} object containing the matrix of response variables, each row should represent one modification site, and each collumn should represent a sample or condition. The entries of \code{assay} are integer values of 1 or 0, with 1 indicating the positive class and 0 indicating the negative class used in logistic regression, the uncertain values should be set as \code{NA}.
 #'
@@ -54,7 +54,7 @@
 #'                                      HK_genes_list = HK_hg19_eids)
 #'
 #'
-#' logistic.modeling(
+#' glm_bas(
 #' SE_features_added,
 #' MCMC_iterations = 10000,
 #' decision_method = "BPM",
@@ -78,7 +78,7 @@
 #'
 #'
 
-logistic.modeling <- function(
+glm_bas <- function(
   se,
   beta_prior = robust(),
   model_prior = beta.binomial(1,1),

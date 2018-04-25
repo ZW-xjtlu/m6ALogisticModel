@@ -1,6 +1,6 @@
 #' @title Dealing with ambiguities of the GRanges in query that may mapped to multiple features with different properties.
 #'
-#' @description \code{Properties_map} mitigates the ambiguities by averaging the properties of multiple mapped query.
+#' @description \code{properties_map} mitigates the ambiguities by averaging the properties of multiple mapped query.
 #' @param query_gr The GRanges to query.
 #' @param feature_grl The GRangesList to map on, e.x. the Genes derived by exonsby(txdb ,by = "genes").
 #' @param feature_properties The vector of properties of the subject (e.x. the length of the Gene).
@@ -9,7 +9,7 @@
 #' @return a vector of mapped properties with the length equal to \code{query_gr}.
 #'
 
-Properties_map <- function(query_gr, feature_gr, feature_properties, no_map_val = NA, normalize = F) {
+properties_map <- function(query_gr, feature_gr, feature_properties, no_map_val = NA, normalize = F) {
 
   fol <- findOverlaps(query_gr,feature_gr)
 

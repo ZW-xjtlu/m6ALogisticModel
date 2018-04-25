@@ -1,6 +1,6 @@
 #' @title Sample nucleotides or motifs on a subset of genome defined by \code{GRanges}.
 #'
-#' @description \code{Sample_sequence_on_TXDB} is used to extract the regions of a query sequence mapped to user defined sub-regions of Genome.
+#' @description \code{sample_sequence} is used to extract the regions of a query sequence mapped to user defined sub-regions of Genome.
 #'
 #' @param Sequence a character string indicating the query sequence or motifs; Rules in \code{\link{IUPAC_CODE_MAP}} is supported when \code{Fixed} = FALSE.
 #'
@@ -27,7 +27,7 @@
 #' @import GenomicFeatures
 #'
 #' @export
-Sample_sequence <- function(Sequence, Subset_GR, BSgnm,Fixed = F, N = NULL, Replace = F){
+sample_sequence <- function(Sequence, Subset_GR, BSgnm,Fixed = F, N = NULL, Replace = F){
   regions_reduced <-  reduce(Subset_GR)
   regions_DNASS <- DNAStringSet( Views(BSgnm,regions_reduced) )
   regions_GRL <- split(regions_reduced, paste0("EX_",1:length(regions_reduced)))

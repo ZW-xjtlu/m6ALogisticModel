@@ -1,4 +1,4 @@
-#' @title Evaluate the joint distribution between rows of a genomic assay.
+#' @title Plot the joint distribution between rows of a genomic assay.
 #'
 #' @description \code{Plot_column_joint} is a function used to evaluate the clustering quality between m6A sites.
 #' @param SE A \code{SummarizedExperiment} with features annotated by \code{\link{predictors.annot}}, the colnames of the SummarizedExperiment should be sample names.
@@ -73,7 +73,7 @@
 #'                                      feature_lst = Feature_List_expanded_hg19,
 #'                                      HK_genes_list = HK_hg19_eids)
 #'
-#'Eval_row_joint(SE_features_added, "Row_joint_CQN")
+#'eval_row_joint(SE_features_added, "Row_joint_CQN")
 #'
 #' @seealso \code{\link{predictors.annot}}
 #'
@@ -84,7 +84,7 @@
 #' @import SummarizedExperiment
 #' @importFrom reshape2 melt
 #' @export
-Eval_row_joint <- function(SE, HDER = "Row_joint", K = 3, ROW_STAND = T, RETURN_INDX = F, PROVIDE_INDX = NULL) {
+eval_row_joint <- function(SE, HDER = "Row_joint", K = 3, ROW_STAND = T, RETURN_INDX = F, PROVIDE_INDX = NULL) {
 stopifnot(class(SE)=="RangedSummarizedExperiment")
 stopifnot(!is.null(mcols(SE)))
 stopifnot(is.null(PROVIDE_INDX) | (length(PROVIDE_INDX) == nrow(SE)))
@@ -230,8 +230,6 @@ fig_width_p2 = 5 + 2.5*(K-1) + .01 * max(nchar(Indx))
 fig_height_p2 = 4 + .08 * length(Indx)
 
 ggsave(paste0(HDER,"_GLMestimates.pdf"),p2,width = fig_width_p2,height = fig_height_p2)
-
-p2
 
 #Calculate the total statistical significance of the proposed model.
 Stat_df <- data.frame(

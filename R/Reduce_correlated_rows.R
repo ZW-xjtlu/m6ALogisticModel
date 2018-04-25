@@ -1,6 +1,6 @@
 #' @title Subset the rows/genomic features that are close on genomic coordinate to reduce the dependencies between rows.
 #'
-#' @description \code{Reduce_correlated_rows} is a function to define a set of metrics to subset the rows that are highly correlated with its nearby features on genomic scale.
+#' @description \code{reduce_correlated_rows} is a function to define a set of metrics to subset the rows that are highly correlated with its nearby features on genomic scale.
 #' @param SE A \code{SummarizedExperiment} with rowRanges being the GRanges of row feaures, and an assay matrix with at least one collumn.
 #' @param cor_method The method to define correlations between rows of the assay matrix, can be one in "spearman" and "pearson".
 #' @param cor_cut_off The correlation cut off threshold used to group 2 nearby rows, default is 0.8.
@@ -22,12 +22,12 @@
 #' @return The output is a \code{SummarizedExperiment} object with subsetted rows compared with the input.
 #'
 #' @examples
-#' Reduce_correlated_rows(SE_CQN,"spearman",".7",101,"maxInfo",assays(SE_CQN)$IP + assays(SE_CQN)$input)
+#' reduce_correlated_rows(SE_CQN,"spearman",".7",101,"maxInfo",assays(SE_CQN)$IP + assays(SE_CQN)$input)
 #'
 #' @import SummarizedExperiment
 #' @export
 
-Reduce_correlated_rows <- function(SE,
+reduce_correlated_rows <- function(SE,
                                    cor_method = "spearman",
                                    cor_cut_off = 0.8,
                                    bin_width = 101,
