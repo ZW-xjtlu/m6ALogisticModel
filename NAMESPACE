@@ -2,6 +2,7 @@
 
 export(glm_bas)
 export(glm_multinomial)
+export(go_multinomial)
 export(plot_row_joint)
 export(predictors_annot_old)
 export(reduce_correlated_rows)

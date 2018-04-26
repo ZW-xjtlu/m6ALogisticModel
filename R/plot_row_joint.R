@@ -74,5 +74,6 @@ fig_height_p1 = 3.4 + .3*K + .05 * max(nchar(as.character(colnames(SE))))
 fig_width_p1 = 4 + .2 * ncol(SE)
 ggsave(paste0(HDER,"_kmedoids.pdf"),p1,width = fig_width_p1,height = fig_height_p1)
 
+if(RETURN_INDX) return(row_cluster$clustering)
 }
 

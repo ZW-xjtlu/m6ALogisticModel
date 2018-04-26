@@ -31,8 +31,8 @@
 #'
 #' Notice that I cannot sum the chisq statistics in background reference scenario, because the K models are dependent (not independent as in the pivot case).
 #'
+#' @import ggplot2
 #' @import nnet
-#' @import SummarizedExperiment
 #' @importFrom reshape2 melt
 #' @export
 
@@ -202,7 +202,7 @@ glm_multinomial <- function(Y,
     theme_classic() + coord_flip() + theme(axis.text.y = element_text(size = 7),
                                            plot.margin = margin(1,1.5,1,1,"cm")) +
     scale_fill_brewer(direction = -1) + scale_colour_manual(values = c(ifelse(all(Plot_df$FDR_sig == "Insig"),0,"red"), 0)) +
-    labs(title = paste0("Multinomial logistic model: ",HDER),
+    labs(title = paste0("Multinomial logistic model ",MODE,": ",HDER),
          subtitle = paste0("Proposed model deviance reduction: ",
                            Proposed_model_chisq,
                            " on ", Model_dof ," df"),
@@ -215,15 +215,15 @@ glm_multinomial <- function(Y,
   ggsave(paste0(HDER,"_GLMestimates.pdf"),p,width = fig_width_p,height = fig_height_p)
 
   #Calculate the total statistical significance of the proposed model.
-  Stat_df <- data.frame(
-    NULL_Deviance = Null_model$deviance,
-    Residual_Deviance = Proposed_model$deviance
-  )
+  #Stat_df <- data.frame(
+  #  NULL_Deviance = Null_model$deviance,
+  #  Residual_Deviance = Proposed_model$deviance
+  #)
 
-  Stat_df$Reduced_prop = 1 - Stat_df$Residual_Deviance/Stat_df$NULL_Deviance
-  Stat_df$Cost_df = length(Indx) * (K-1) - 1
-  Stat_df$Chisq_stat = Stat_df$NULL_Deviance - Stat_df$Residual_Deviance
-  write.table(t(Stat_df),paste0("Model_report_",HDER,".txt"),col.names = F)
+  #Stat_df$Reduced_prop = 1 - Stat_df$Residual_Deviance/Stat_df$NULL_Deviance
+  #Stat_df$Cost_df = length(Indx) * (K-1) - 1
+  #Stat_df$Chisq_stat = Stat_df$NULL_Deviance - Stat_df$Residual_Deviance
+  #write.table(t(Stat_df),paste0("Model_report_",HDER,".txt"),col.names = F)
 
 
 }

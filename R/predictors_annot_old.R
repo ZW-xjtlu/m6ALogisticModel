@@ -73,7 +73,7 @@
 #'
 #'    ###6. User specified features by argument \code{feature_lst} ###
 #'
-#' The entries are logical / dummy variables, specifying wheather overlapping with each GRanges or GRanges list.
+#' The entries are logical / dummy variables, specifying whether overlapping with each GRanges or GRanges list.
 #'
 #'    ###7.Gene attribute ###
 #'
@@ -441,7 +441,7 @@ if(is.null(struct_hybridize)) {} else {
  #
  #   ###6. User specified features by argument \code{feature_lst}###
  #
- # The entries are logical / dummy variables, specifying wheather overlapping with each GRanges or GRanges list.
+ # The entries are logical / dummy variables, specifying whether overlapping with each GRanges or GRanges list.
 
 if(!is.null(feature_lst)) {
     for(i_flst in names(feature_lst)) {
