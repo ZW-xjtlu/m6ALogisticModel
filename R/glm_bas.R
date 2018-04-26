@@ -71,7 +71,6 @@
 #' @import GenomicRanges
 #' @import ggplot2
 #' @import SummarizedExperiment
-#' @import BAS
 #'
 #' @export
 #'
@@ -89,6 +88,9 @@ glm_bas <- function(
   sample_names_coldata = colnames(colData(se))[1],
   group_list = group_list_default
 ){
+if(!require(BAS)){
+  stop("You need to first install BAS to use this function.")
+}
 #Create saving directories
 if(dir.exists(save_dir)) {} else{
   dir.create(save_dir)

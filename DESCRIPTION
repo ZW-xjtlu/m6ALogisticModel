@@ -6,7 +6,7 @@ Author: Zhen Wei
 Maintainer: Zhen Wei <zhen.wei10@icloud.com>
 Description: This package can generate features and build linear models on RNA modification data. 
 License: What license is it under?
-Imports: BAS, readr, BSgenome, Biostrings, GenomicFeatures, GenomicRanges, SummarizedExperiment, magrittr, ggplot2, cluster, reshape2, nnet
+Imports: readr, BSgenome, Biostrings, GenomicFeatures, GenomicRanges, SummarizedExperiment, magrittr, ggplot2, cluster, reshape2, nnet
 Depends: SummarizedExperiment
 Encoding: UTF-8
 LazyData: true
