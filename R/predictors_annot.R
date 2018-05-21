@@ -257,9 +257,11 @@ predictors_annot <- function(se,
 
   Start_codons <- resize( unlist( range(cds) ) , 1, fix = "start" )
 
-  TSS <- resize(unlist(range(exbytx_txdb)),100,fix = "start")
+  TSS <- resize(unlist(range(exbytx_txdb)),1,fix = "start")
 
   A_idx <- vcountPattern("A", DNAStringSet( Views(bsgnm, TSS))) > 0
+
+  TSS <- resize(TSS,100,fix = "start")
 
   UTR3 <- threeUTRsByTranscript(txdb)
 
@@ -325,7 +327,7 @@ predictors_annot <- function(se,
   #Alternative exons: exons that could be introns in some transcripts
   exbytx_unlist <- unlist( exbytx_txdb )
 
-  Feature_matrix$alternative_exon <- row_gr%over%subsetByOverlaps( exbytx_unlist, unlist(Intron)+1, type = "within", maxgap=0L)
+  Feature_matrix$alternative_exon <- row_gr%over%subsetByOverlaps(exs_txdb, unlist(Intron)+1, type = "within", maxgap=0L)
 
   i  = Speak("alternatively spliced exons",i)
 
@@ -530,13 +532,20 @@ predictors_annot <- function(se,
   # ## Clustering effect.
   #
 
-  Feature_matrix$dist_nearest_p2000 <- as.numeric( scale_i( pmin(mcols(distanceToNearest(row_gr))$distance,2000) ))
+  dist_self <- rep(2000,length(row_gr))
+  match_obj <- distanceToNearest(row_gr)
+  dist_self[queryHits(match_obj)] <- mcols(match_obj)$distance
+
+  Feature_matrix$dist_nearest_p2000 <- as.numeric( scale_i( pmin(dist_self,2000) ))
 
   i  = Speak("clustering indicators --- distance to the nearest neigboors (peaked at 2000bp)",i)
 
-  Feature_matrix$dist_nearest_p200 <- as.numeric( scale_i( pmin(mcols(distanceToNearest(row_gr))$distance,200) ))
+  Feature_matrix$dist_nearest_p200 <- as.numeric( scale_i( pmin(dist_self,200) ))
 
   i  = Speak("clustering indicators --- distance to the nearest neigboors (peaked at 200bp)",i)
+
+  rm(match_obj)
+  rm(dist_self)
 
   #   ###5. Evolutionary fitness###
   #

@@ -64,7 +64,7 @@ The features that must be included:
 
 - UTR3: 3'UTR.
 
-- CDS: Coding Sequence.
+- cds: Coding Sequence.
 
 - Stop_codons: Stop codon (301 bp center).
 
@@ -84,7 +84,7 @@ The features that must be included:
 
 - pos_UTR3: Relative positioning on 3'UTR.
 
-- pos_CDS: Relative positioning on Coding Sequence.
+- pos_cds: Relative positioning on Coding Sequence.
 
 - pos_Tx: Relative positioning on Transcript.
 
