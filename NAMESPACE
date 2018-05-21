@@ -2,8 +2,10 @@
 
 export(glm_bas)
 export(glm_multinomial)
+export(glm_regular)
 export(go_multinomial)
 export(plot_row_joint)
+export(predictors_annot)
 export(predictors_annot_old)
 export(reduce_correlated_rows)
 export(sample_sequence)

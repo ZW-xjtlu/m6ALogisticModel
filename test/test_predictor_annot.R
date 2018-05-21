@@ -32,7 +32,7 @@ test_that("predictors annotation", {
                                         pc = phastCons100way.UCSC.hg19,
                                         struct_hybridize = Struc_hg19,
                                         feature_lst = Additional_features_hg19,
-                                        HK_genes_list = HK_hg19_eids)
+                                        hk_genes_list = HK_hg19_eids)
 
   expect_that(SE_features_added, is_a("SummarizedExperiment"))
 })

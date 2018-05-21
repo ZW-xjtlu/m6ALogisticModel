@@ -1,6 +1,6 @@
 #' @title Infer looped RNA 2ndary structures given provided hybridized 2ndary structures.
 #'
-#' @description \code{Infer_loop} is used to extract the roughly accurate looped regions beween closed hybridized pairs given regions of hybridization.
+#' @description \code{infer_loop} is used to extract the roughly accurate looped regions beween closed hybridized pairs given regions of hybridization.
 #'
 #' @param struc_sterm a \code{GRanges} or \code{GRangesList} object that indicates the hybridized structure region on each transcript.
 #'
@@ -9,7 +9,7 @@
 #'
 #' @return a \code{GRanges} object with regions corresponding to the inferred looped region given the provided hybridized region.
 #'
-Infer_loop <- function(struc_sterm, length_cut_off = 30){
+infer_loop <- function(struc_sterm, length_cut_off = 30){
   all_range <- reduce(unlist(range(struc_sterm)))
   struc_sterm_r <- reduce(unlist( struc_sterm ))
   dsj_strucs <- disjoin(c(all_range, struc_sterm_r))

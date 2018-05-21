@@ -353,3 +353,12 @@ group_list_default = list(
 #Try to demonstrate predict evolutionary conservation with other features.
 
 # Case study to demonstrate the usage of this tool, classify the differences between evolutionary conserved and evolutionary unconserved (by FC and PC) m6A sites reported by RMBase2.
+
+Gtcoord_hg19 <- readRDS("/Users/zhenwei/Datasets/Gtcoords/Gtcoord_hg19.rds")
+Guitar::GuitarPlot(list(Start_codons),Gtcoord_hg19)
+Guitar::GuitarPlot(list(Stop_codons),Gtcoord_hg19)
+Guitar::GuitarPlot(list(TSS),Gtcoord_hg19)
+Guitar::GuitarPlot(list(TSS[A_idx]),Gtcoord_hg19)
+Guitar::GuitarPlot(list(Last_exons_400bp),Gtcoord_hg19)
+
+Guitar::GuitarPlot(list(subsetByOverlaps( Last_exons_400bp, Stop_codons)),Gtcoord_hg19)

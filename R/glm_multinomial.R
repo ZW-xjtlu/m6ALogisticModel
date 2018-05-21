@@ -47,7 +47,7 @@ glm_multinomial <- function(Y,
 
   #Fit multinomial GLM to analysis the clustering label
 
-  indx_no_info <- sapply(PREDICTORS,function(x) {if (is.logical(x)){
+  indx_no_info <- sapply( PREDICTORS, function(x) { if (is.logical(x)){
     return( (sum(x) <= CUT_OFF | sum(!x) <= CUT_OFF) )
   } else {
     return(F)

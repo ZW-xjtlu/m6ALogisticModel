@@ -2,6 +2,7 @@ library(testthat)
 test_that("meth k means cluster", {
  library(m6ALogisticModel)
  SE_CQN <- readRDS("SE_CQN_filtered.rds")
+ set.seed(1)
  Y <- plot_row_joint(SE_CQN,RETURN_INDX = T)
  expect_that(Y, is_a("integer"))
  expect_that(length(Y) == nrow(SE_CQN), is_true())
@@ -21,4 +22,14 @@ test_that("go multinomial", {
                  HDER = "GO_test",
                  GO_Slim = T
                  )
+})
+
+test_that("multinomial general", {
+
+  glm_regular(Y,
+             row_ranges = mcols(rowgr),
+             HDER = "glm",
+             family = "poisson",
+             CUT_OFF = 5
+  )
 })
