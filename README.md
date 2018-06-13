@@ -1,4 +1,4 @@
-User guide for package RNAglm
+User guide for package m6ALogisticModel
 ================
 
 Installation
