@@ -22,6 +22,7 @@ The major usages of this package:
 3.  Provide a template for the insightful linear modeling on the relationship between **belonging (dummy), relative position, and length** for a given region of a transcript. For example, the previous researches suggest that exon length, relative position on 3'UTR, and stop codons are important predictors for the presence of m6A mRNA modification under different biological contexts.
 
 We will build the following design for a given transcript region to improve the topological insight gained on that region:
+
 Belong_Region_X + Belong_Region_X::Length_Region_X + Belong_Region_X::Position_Region_X
 
 
