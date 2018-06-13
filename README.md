@@ -10,7 +10,6 @@ Currently, you could install this package using this command in R.
 devtools::install_github("ZhenWei10/m6ALogisticModel")
 ```
 
-<hr/>
 Motivation
 ----------
 
