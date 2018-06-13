@@ -25,7 +25,7 @@ test_that("predictors annotation", {
 
   SE_CQN <- readRDS("SE_CQN_filtered.rds")
 
-  SE_features_added <- predictors_annot(se = SE_CQN,
+  SE_features_added <- predictors_annot(se = SE_example,
                                         txdb = TxDb.Hsapiens.UCSC.hg19.knownGene,
                                         bsgnm = Hsapiens,
                                         fc = fitCons.UCSC.hg19,

@@ -14,7 +14,7 @@ devtools::install_github("ZhenWei10/m6ALogisticModel")
 Motivation
 ----------
 
-The major purposes to create this package are:
+The major usages of this package:
 
 1. Facilitate the data mining process on RNA level high-throughput data, while being able to deal with **confounding transcriptomic features** that are common in RNA genomics.
 
@@ -32,8 +32,8 @@ Finally, the generalized linear modeling is coupled with model selection methods
 
 The funcions for the transcript feature annotation and the generalized linear modeling are included in this package; while at the same time, users can introduce more genomic features defined by them self using GRanges object. Effective visualization for comparations between multiple models are also implemented in this package.
 
-<hr/>
-A case study with this package.
+
+Usage Demonstration --- Features Annotation
 -------------------------------
 
 ``` r
