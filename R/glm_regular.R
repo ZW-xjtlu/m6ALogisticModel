@@ -6,9 +6,11 @@
 #' @param HDER The subtitle and the file name of the plot.
 #' @param family Define the family of the glm, should be one of "gaussian", "binomial", and "poisson",
 #' @param CUT_OFF The cut off of the occurence of the less abundence class in binary features, if the less frequent class is less than this threshold, the feature will be dropped, default is 5. This is important when we want to have a reliable asymptotics result in Wald test.
+#' @param Critical_value The critical value used on adjusted p values, default is 0.05.
 #' @param Exclude_intercept Whether to omit the intercept term when plot the estimates and statistics, this should be applied when the intercept estimates is too big relative to other predictors, default is FALSE.
+#' @param Sort_by Determine the order of the predictors showed in the plot, should be one of "byLogit", "byZstat", default is byLogit.
 #'
-#' @details The function will fit a linear model based on the provided predictors and the response variable. The coefficient estimates and the wald test statistics will be save in a graph.
+#' @details The function will fit a linear model based on the provided predictors and the response variable. The coefficient estimates and the wald test statistics will be saved in a graph.
 #' @import ggplot2
 #' @export
 
@@ -18,7 +20,8 @@ glm_regular <- function(Y,
                         family = c("gaussian","binomial","poisson"),
                         CUT_OFF = 5,
                         Critical_value = 0.05,
-                        Exclude_intercept = F) {
+                        Exclude_intercept = F,
+                        Sort_by = c("byZstat","byLogit")) {
 
   stopifnot( is.null(ncol(Y)) | family == "binomial" )
 
@@ -27,6 +30,24 @@ glm_regular <- function(Y,
   stopifnot(length(Y) == nrow(PREDICTORS) | nrow(Y) == nrow(PREDICTORS))
 
   family <- match.arg(family)
+
+  Y_na <- is.na(Y)
+
+  if(any(Y_na)){
+  warning(paste0(sum(Y_na),"response rows contain missing values,
+                 they are dropped from the model."),call.=FALSE,immediate. = TRUE)
+  }
+
+  X_na <- apply(is.na(PREDICTORS),1,any)
+
+  if(any(X_na)){
+    warning(paste0(sum(X_na),"feature rows contain missing values,
+                 they are dropped from the model."),call.=FALSE,immediate. = TRUE)
+  }
+
+  Y <- Y[!(Y_na|X_na)]
+
+  PREDICTORS <- PREDICTORS[!(Y_na|X_na),]
 
   indx_no_info <- sapply( PREDICTORS, function(x) { if (is.logical(x)){
     return( (sum(x) <= CUT_OFF | sum(!x) <= CUT_OFF) )
@@ -71,7 +92,14 @@ glm_regular <- function(Y,
     plot_df$X_lab <- as.character(plot_df$X_lab)
   }
 
+  Sort_by <- match.arg(Sort_by)
+
+  if(Sort_by == "byZstat" ) {
+  plot_df$X_lab = factor(plot_df$X_lab,levels = plot_df$X_lab[order(plot_df$`z.value`,decreasing = F)])
+  }else {
   plot_df$X_lab = factor(plot_df$X_lab,levels = plot_df$X_lab[order(plot_df$Estimate,decreasing = F)])
+  }
+
 
   plot_df <- reshape2::melt(plot_df,id.vars = "X_lab")
   plot_df$Cv <- NA
@@ -79,12 +107,16 @@ glm_regular <- function(Y,
   plot_df$Cv[t_idx[1]] = Critical_value
   plot_df$Cv[t_idx[2]] = -1*Critical_value
 
-  library(ggplot2)
+  if(Sort_by == "byZstat" ) {
+    plot_df$variable = factor(plot_df$variable,levels = c("z.value","Estimate"))
+  }else {
+    plot_df$variable = factor(plot_df$variable,levels = c("z.value","Estimate"))
+  }
 
   p1 <- ggplot(plot_df,aes(x = X_lab, y = value)) +
-    geom_bar(stat = "identity", width = .4, fill = "blue2", colour = "red", size = 0.1) +
+    geom_bar(stat = "identity", width = .4, fill = "darkblue", colour = "red", size = 0.1) +
     geom_hline(aes(yintercept = Cv), alpha = .5, linetype = 2, size = .35) +
-    coord_flip() + facet_grid(~variable,scales = "free") +
+    coord_flip() + facet_grid(~ variable,scales = "free") +
     theme_classic() +
     labs(title = paste0(family, " linear model on genomic features" ),
          subtitle = HDER,
@@ -92,4 +124,5 @@ glm_regular <- function(Y,
 
   suppressWarnings( ggsave( paste0(HDER,"_",family,"_glm.pdf"), p1, width = 4.8, height = 1.7 +  (nrow(plot_df)/2)*.1 ))
 
+  return(p1)
 }

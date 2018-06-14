@@ -37,7 +37,7 @@ readRDS("")
 
 setwd("/Users/zhenwei/Documents/GitHub/m6ALogisticModel")
 eCLIP_HNRNPC_gr <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/I_GLM_feature_prep_2018_1_4/eCLIP_HNRNPC.rds")
-devtools::use_data(eCLIP_HNRNPC_gr)
+devtools::use_data(eCLIP_HNRNPC_gr,overwrite = TRUE)
 
 YTHDC1_TREW_gr <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/I_GLM_feature_prep_2018_1_4/YTHDC1_TREW_gr.rds")
 devtools::use_data(YTHDC1_TREW_gr)
@@ -102,7 +102,8 @@ devtools::use_data(METTL14_TREW,overwrite = TRUE)
 WTAP_TREW <- readRDS("/Users/zhenwei/Documents/GitHub/TREW-cons/More\ Modeling\ triles/WTAP_TREW_gr.rds")
 devtools::use_data(WTAP_TREW,overwrite = TRUE)
 
-
+hg19_miCLIP_gr <- readRDS("/Users/zhenwei/Documents/GitHub/Project_X/hg19_miCLIP_ml.rds")
+devtools::use_data(hg19_miCLIP_gr,overwrite = TRUE,pkg = "/Users/zhenwei/Documents/GitHub/m6ALogisticModel")
 
 group_list_expanded = list(
   UTR5 = c("UTR5", "Pos_UTR5", "length_UTR5"),

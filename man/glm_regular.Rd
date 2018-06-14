@@ -18,11 +18,13 @@ glm_regular(Y, PREDICTORS, HDER = "glm", family = c("gaussian", "binomial",
 
 \item{CUT_OFF}{The cut off of the occurence of the less abundence class in binary features, if the less frequent class is less than this threshold, the feature will be dropped, default is 5. This is important when we want to have a reliable asymptotics result in Wald test.}
 
+\item{Critical_value}{The critical value used on adjusted p values, default is 0.05.}
+
 \item{Exclude_intercept}{Whether to omit the intercept term when plot the estimates and statistics, this should be applied when the intercept estimates is too big relative to other predictors, default is FALSE.}
 }
 \description{
 \code{glm_regular} is a function used to build a regular generalized linear model based on genomic features.
 }
 \details{
-The function will fit a linear model based on the provided predictors and the response variable. The coefficient estimates and the wald test statistics will be save in a graph.
+The function will fit a linear model based on the provided predictors and the response variable. The coefficient estimates and the wald test statistics will be saved in a graph.
 }
