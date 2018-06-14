@@ -174,28 +174,27 @@ sessionInfo()
     ## [8] methods   base     
     ## 
     ## other attached packages:
-    ##  [1] ggplot2_2.2.1                          
-    ##  [2] phastCons100way.UCSC.hg19_3.6.0        
-    ##  [3] fitCons.UCSC.hg19_3.6.0                
-    ##  [4] GenomicScores_1.2.2                    
-    ##  [5] BSgenome.Hsapiens.UCSC.hg19_1.4.0      
-    ##  [6] BSgenome_1.46.0                        
-    ##  [7] rtracklayer_1.38.3                     
-    ##  [8] Biostrings_2.46.0                      
-    ##  [9] XVector_0.18.0                         
-    ## [10] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
-    ## [11] GenomicFeatures_1.30.3                 
-    ## [12] AnnotationDbi_1.40.0                   
-    ## [13] m6ALogisticModel_0.3.3                 
-    ## [14] SummarizedExperiment_1.8.1             
-    ## [15] DelayedArray_0.4.1                     
-    ## [16] matrixStats_0.53.1                     
-    ## [17] Biobase_2.38.0                         
-    ## [18] GenomicRanges_1.30.3                   
-    ## [19] GenomeInfoDb_1.14.0                    
-    ## [20] IRanges_2.12.0                         
-    ## [21] S4Vectors_0.16.0                       
-    ## [22] BiocGenerics_0.24.0                    
+    ##  [1] phastCons100way.UCSC.hg19_3.6.0        
+    ##  [2] fitCons.UCSC.hg19_3.6.0                
+    ##  [3] GenomicScores_1.2.2                    
+    ##  [4] BSgenome.Hsapiens.UCSC.hg19_1.4.0      
+    ##  [5] BSgenome_1.46.0                        
+    ##  [6] rtracklayer_1.38.3                     
+    ##  [7] Biostrings_2.46.0                      
+    ##  [8] XVector_0.18.0                         
+    ##  [9] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
+    ## [10] GenomicFeatures_1.30.3                 
+    ## [11] AnnotationDbi_1.40.0                   
+    ## [12] m6ALogisticModel_0.3.3                 
+    ## [13] SummarizedExperiment_1.8.1             
+    ## [14] DelayedArray_0.4.1                     
+    ## [15] matrixStats_0.53.1                     
+    ## [16] Biobase_2.38.0                         
+    ## [17] GenomicRanges_1.30.3                   
+    ## [18] GenomeInfoDb_1.14.0                    
+    ## [19] IRanges_2.12.0                         
+    ## [20] S4Vectors_0.16.0                       
+    ## [21] BiocGenerics_0.24.0                    
     ## 
     ## loaded via a namespace (and not attached):
     ##  [1] Rcpp_0.12.17                  lattice_0.20-35              
@@ -205,26 +204,26 @@ sessionInfo()
     ##  [9] R6_2.2.2                      plyr_1.8.4                   
     ## [11] backports_1.1.2               RSQLite_2.0                  
     ## [13] evaluate_0.10.1               BiocInstaller_1.28.0         
-    ## [15] httr_1.3.1                    pillar_1.2.3                 
-    ## [17] zlibbioc_1.24.0               rlang_0.2.0                  
-    ## [19] progress_1.1.2                lazyeval_0.2.1               
-    ## [21] blob_1.1.1                    Matrix_1.2-14                
-    ## [23] rmarkdown_1.9                 labeling_0.3                 
-    ## [25] RMySQL_0.10.14                BiocParallel_1.12.0          
-    ## [27] AnnotationHub_2.10.1          stringr_1.3.0                
-    ## [29] RCurl_1.95-4.10               bit_1.1-14                   
-    ## [31] biomaRt_2.34.2                munsell_0.4.3                
-    ## [33] shiny_1.0.5                   httpuv_1.3.6.2               
-    ## [35] compiler_3.4.2                pkgconfig_2.0.1              
-    ## [37] htmltools_0.3.6               nnet_7.3-12                  
-    ## [39] tibble_1.4.2                  GenomeInfoDbData_1.0.0       
-    ## [41] interactiveDisplayBase_1.16.0 XML_3.98-1.11                
-    ## [43] GenomicAlignments_1.14.2      bitops_1.0-6                 
-    ## [45] grid_3.4.2                    xtable_1.8-2                 
-    ## [47] gtable_0.2.0                  DBI_1.0.0                    
-    ## [49] magrittr_1.5                  scales_0.5.0                 
-    ## [51] stringi_1.2.2                 reshape2_1.4.3               
-    ## [53] tools_3.4.2                   bit64_0.9-7                  
-    ## [55] yaml_2.1.19                   colorspace_1.3-2             
-    ## [57] cluster_2.0.7-1               memoise_1.1.0                
-    ## [59] knitr_1.20
+    ## [15] httr_1.3.1                    ggplot2_2.2.1                
+    ## [17] pillar_1.2.3                  zlibbioc_1.24.0              
+    ## [19] rlang_0.2.0                   progress_1.1.2               
+    ## [21] lazyeval_0.2.1                blob_1.1.1                   
+    ## [23] Matrix_1.2-14                 rmarkdown_1.9                
+    ## [25] labeling_0.3                  RMySQL_0.10.14               
+    ## [27] BiocParallel_1.12.0           AnnotationHub_2.10.1         
+    ## [29] stringr_1.3.0                 RCurl_1.95-4.10              
+    ## [31] bit_1.1-14                    biomaRt_2.34.2               
+    ## [33] munsell_0.4.3                 shiny_1.0.5                  
+    ## [35] httpuv_1.3.6.2                compiler_3.4.2               
+    ## [37] pkgconfig_2.0.1               htmltools_0.3.6              
+    ## [39] nnet_7.3-12                   tibble_1.4.2                 
+    ## [41] GenomeInfoDbData_1.0.0        interactiveDisplayBase_1.16.0
+    ## [43] XML_3.98-1.11                 GenomicAlignments_1.14.2     
+    ## [45] bitops_1.0-6                  grid_3.4.2                   
+    ## [47] xtable_1.8-2                  gtable_0.2.0                 
+    ## [49] DBI_1.0.0                     magrittr_1.5                 
+    ## [51] scales_0.5.0                  stringi_1.2.2                
+    ## [53] reshape2_1.4.3                tools_3.4.2                  
+    ## [55] bit64_0.9-7                   yaml_2.1.19                  
+    ## [57] colorspace_1.3-2              cluster_2.0.7-1              
+    ## [59] memoise_1.1.0                 knitr_1.20

@@ -5,7 +5,8 @@
 \title{Build and visualize a generalized linear model.}
 \usage{
 glm_regular(Y, PREDICTORS, HDER = "glm", family = c("gaussian", "binomial",
-  "poisson"), CUT_OFF = 5, Critical_value = 0.05, Exclude_intercept = F)
+  "poisson"), CUT_OFF = 5, Critical_value = 0.05, Exclude_intercept = F,
+  Sort_by = c("byZstat", "byLogit"))
 }
 \arguments{
 \item{Y}{A \code{vector} that defines the response variable. It can be a 2-column integer matrix given the binomial family：the first column gives the number of successes and the second the number of failures.}
@@ -21,6 +22,8 @@ glm_regular(Y, PREDICTORS, HDER = "glm", family = c("gaussian", "binomial",
 \item{Critical_value}{The critical value used on adjusted p values, default is 0.05.}
 
 \item{Exclude_intercept}{Whether to omit the intercept term when plot the estimates and statistics, this should be applied when the intercept estimates is too big relative to other predictors, default is FALSE.}
+
+\item{Sort_by}{Determine the order of the predictors showed in the plot, should be one of "byLogit", "byZstat", default is byLogit.}
 }
 \description{
 \code{glm_regular} is a function used to build a regular generalized linear model based on genomic features.
