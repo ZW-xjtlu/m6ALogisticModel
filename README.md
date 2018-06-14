@@ -25,7 +25,7 @@ We will build the following design for a given transcript region to improve the 
 
 Belong\_Region\_X + Belong\_Region\_X::Length\_Region\_X + Belong\_Region\_X::Position\_Region\_X
 
-**Generalized linear model** is a computational technique used here; it can efficiently quantify the scientific and statistical significance for all the features, while adjust their dependencies on each others. Also, the generalized linear model can be applied on different family of response variables, which can effectively model the transcriptomic data with different data forms (e.x. real valued, binary, and counts).
+**Generalized linear model** is a computational technique used here; it can efficiently quantify the scientific and statistical significance for all the features, while adjust their dependencies on each others. Also, the generalized linear model supports response variables being different distribution families, which can effectively model the transcriptomic data set with different data structures (e.x. real valued, binary, and counts).
 
 Finally, the generalized linear modeling can be coupled with model selection methods to reduce the potential negative effects in presence of large numbers of highly correlated features (high collinearity). Also, model selection can yield robust coefficient estimates that can generate reliable biological interpretations.
 
