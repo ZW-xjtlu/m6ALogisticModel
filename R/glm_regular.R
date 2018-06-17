@@ -23,6 +23,12 @@ glm_regular <- function(Y,
                         Exclude_intercept = F,
                         Sort_by = c("byZstat","byLogit")) {
 
+  if(family == "binomical" & !is.logical(Y)) {
+    stop("A binomial generalized linear model requires input of a logical vector (composed with TRUE and FALSE).")
+  }
+
+  stopifnot(length(Y) == nrow(PREDICTORS))
+
   stopifnot( is.null(ncol(Y)) | family == "binomial" )
 
   stopifnot( is.null(ncol(Y)) | ncol(Y) == 2 )
@@ -34,14 +40,14 @@ glm_regular <- function(Y,
   Y_na <- is.na(Y)
 
   if(any(Y_na)){
-  warning(paste0(sum(Y_na),"response rows contain missing values,
+  warning(paste0(sum(Y_na)," observations in response variables contain missing values,
                  they are dropped from the model."),call.=FALSE,immediate. = TRUE)
   }
 
   X_na <- apply(is.na(PREDICTORS),1,any)
 
   if(any(X_na)){
-    warning(paste0(sum(X_na),"feature rows contain missing values,
+    warning(paste0(sum(X_na)," rows in features contain missing values,
                  they are dropped from the model."),call.=FALSE,immediate. = TRUE)
   }
 

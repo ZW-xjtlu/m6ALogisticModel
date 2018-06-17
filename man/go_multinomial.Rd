@@ -8,7 +8,7 @@ go_multinomial(Y, row_ranges, txdb, orgDb, HDER = "GO_multinomial",
   category = "BP", min_bg_count = 10, min_gs_count = 10,
   max_bg_count = 500, max_gs_count = 500, pvalue_correction = "BH",
   GO_Slim = FALSE, EASE_Score = TRUE, top_terms = 10,
-  save_chart = FALSE)
+  save_chart = FALSE, background_ranges = NULL)
 }
 \arguments{
 \item{Y}{A \code{vector} that defines the observed multinomial response variable.}
@@ -40,6 +40,8 @@ go_multinomial(Y, row_ranges, txdb, orgDb, HDER = "GO_multinomial",
 \item{top_terms}{Top number of terms (sorted by p values) for each multinomial class returned in the analysis, default is 10.}
 
 \item{save_chart}{Whether to save the chart of GO enrichment for each calss, default FALSE.}
+
+\item{background_ranges}{A \code{GRanges} object that defines the GO enrichment background, default is not used.}
 
 \item{gene_key}{A character specifying the type of the gene ID, the available types of the keys can be find using \code{keytypes(org.Hs.eg.db)}, default "ENTREZID".}
 }

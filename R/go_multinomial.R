@@ -17,6 +17,7 @@
 #' @param EASE_Score Whether or not use EASE score method. (a more conservative hypergeomatric test calculation used in DAVID) for more details please refer to \href{https://david.ncifcrf.gov/helps/functional_annotation.html#fisher}{here}, default TRUE.
 #' @param top_terms Top number of terms (sorted by p values) for each multinomial class returned in the analysis, default is 10.
 #' @param save_chart Whether to save the chart of GO enrichment for each calss, default FALSE.
+#' @param background_ranges A \code{GRanges} object that defines the GO enrichment background, default is not used.
 #'
 #' @import ggplot2
 #' @importFrom reshape2 melt
@@ -37,8 +38,14 @@ go_multinomial <- function(Y,
                            GO_Slim = FALSE,
                            EASE_Score = TRUE,
                            top_terms = 10,
-                           save_chart = FALSE
+                           save_chart = FALSE,
+                           background_ranges = NULL
                            ){
+
+stopifnot(length(Y) == length(row_ranges))
+
+stopifnot(is.vector(Y))
+
 if(!require(golite)){
   stop("You need to install package 'golite' first. You can consider to use the command: devtools::install_github('/ZhenWei10/golite').")
 }
@@ -47,8 +54,21 @@ gene_by_tx <- transcriptsBy(txdb,by = "gene")
 
 genes_lst <- tapply(row_ranges,Y,function(x) names(subsetByOverlaps(gene_by_tx,x)) )
 
+if(!is.null(background_ranges)) {
+
+genes_bg <- names(subsetByOverlaps(gene_by_tx,background_ranges))
+
+stopifnot(all(unique(unlist(genes_lst)) %in% genes_bg))
+
+} else {
+
+genes_bg <-  unique(unlist(genes_lst))
+
+}
+
+
 goea_lst <- goea(gene_set = genes_lst,
-                 back_ground = unique(unlist(genes_lst)),
+                 back_ground = genes_bg,
                  orgDb = orgDb,
                  category = category,
                  gene_key = "ENTREZID",
@@ -88,6 +108,10 @@ goea_lst_sub_comp <- Map(function(x,y) {
 
 Plot_df_sup <- Reduce( rbind, goea_lst_sub_comp )
 Plot_df_sup$Clusters <-  rep(names(goea_lst_sub_comp),elementNROWS(goea_lst_sub_comp))
+
+if(is.factor(Y)) {Plot_df_sup$Clusters = factor(Plot_df_sup$Clusters,
+                                                levels = levels(Y))}
+
 Plot_df_sup$definition = factor(Plot_df_sup$definition , levels = unique_terms)
 Plot_df <- rbind(Plot_df,Plot_df_sup)
 
@@ -102,7 +126,6 @@ colnames(Plot_df)[colnames(Plot_df) == "nlog2padj"] = "-log2 padj"
 mean_padj <- round( tapply(Plot_df$`-log2 padj`,Plot_df$Clusters,mean), 2 )
 
 
-
 p <- ggplot(Plot_df) + geom_point(aes(x = Clusters,
                                  y = definition,
                                  size = `-log2 padj`,
@@ -113,8 +136,9 @@ p <- ggplot(Plot_df) + geom_point(aes(x = Clusters,
                     subtitle = paste0("mean(top",top_terms ," -log2 padj): ",paste0(mean_padj, collapse = ", "))) +
                 theme(axis.text.y = element_text(size = 7),
                       plot.margin = margin(1,1.5,1,1,"cm")) +
-               scale_colour_brewer(palette = "Dark2") +
                scale_shape_manual(values = c(16,18))
+
+if (length(unique(Y)) <= 8) { p <- p + scale_colour_brewer(palette = "Dark2") }
 
 K = length(goea_lst)
 
@@ -123,4 +147,5 @@ fig_width_p = 2 + 1*K + .033 * max(nchar(unique_terms))
 fig_height_p = 4 + .13 * length(unique_terms)
 
 ggsave(paste0(HDER,"_goea.pdf"),p,width = fig_width_p,height = fig_height_p)
+
 }
