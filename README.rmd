@@ -80,7 +80,7 @@ hg19_miCLIP_se <- predictors_annot(se = hg19_miCLIP_se,
 ##Usage Demonstration --- Generalized Linear Modeling
 
 
-```{r, warning=FALSE, fig.align ='center', fig.height = 10, fig.width = 6}
+```{r, warning=FALSE, fig.align ='center', fig.height = 12, fig.width = 8}
 glm_regular(Y = hg19_miCLIP_gr$Target > 0,
             PREDICTORS = as.data.frame( rowData(hg19_miCLIP_se)[,-1] ),
             family = "binomial",

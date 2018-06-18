@@ -112,6 +112,7 @@ glm_regular <- function(Y,
   t_idx <- which(plot_df$variable == "z.value")
   plot_df$Cv[t_idx[1]] = Critical_value
   plot_df$Cv[t_idx[2]] = -1*Critical_value
+  plot_df$Critical_value = "Bonferroni FWER < 0.05"
 
   if(Sort_by == "byZstat" ) {
     plot_df$variable = factor(plot_df$variable,levels = c("z.value","Estimate"))
@@ -121,14 +122,33 @@ glm_regular <- function(Y,
 
   p1 <- ggplot(plot_df,aes(x = X_lab, y = value)) +
     geom_bar(stat = "identity", width = .4, fill = "darkblue", colour = "red", size = 0.1) +
-    geom_hline(aes(yintercept = Cv), alpha = .5, linetype = 2, size = .35) +
+    geom_hline(aes(yintercept = Cv,
+                   colour = Critical_value),
+               alpha = .5,
+               linetype = 2,
+               size = .55) +
     coord_flip() + facet_grid(~ variable,scales = "free") +
     theme_classic() +
-    labs(title = paste0(family, " linear model on genomic features" ),
+    labs(title = paste0(family, " generalized linear model with genomic features" ),
          subtitle = HDER,
-         x = "predictors")
+         x = "predictors",
+         y = NULL) +
+    theme(plot.margin = margin(t = 1,
+                              r = 2,
+                              b = 0.5,
+                              l = 1,
+                              unit = "cm"),
+          plot.title = element_text(face = "bold",
+                                    vjust = 1),
+          axis.text.y = element_text(face = "bold",
+                                     colour = "darkblue"),
+          legend.position = "bottom",
+          legend.direction = "horizontal",
+          legend.box = "vertical",
+          legend.justification = "center") +
+    scale_colour_manual(values = "black")
 
-  suppressWarnings( ggsave( paste0(HDER,"_",family,"_glm.pdf"), p1, width = 4.8, height = 1.7 +  (nrow(plot_df)/2)*.1 ))
+  suppressWarnings( ggsave( paste0(HDER,"_",family,"_glm.pdf"), p1, width = 7.8, height = 2.7 +  (nrow(plot_df)/2)*.15 ))
 
   return(p1)
 }
