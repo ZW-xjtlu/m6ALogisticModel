@@ -127,7 +127,6 @@
 #'
 #' @param standardization A logical indicating whether to standardize the continous features; Default TRUE.
 #'
-#' P.S. the relative positions will not be standardized.
 #'
 #' @return This function will return a \code{\link{SummarizedExperiment}} object with a \code{mcols} of a feature or design matrix.
 #'
