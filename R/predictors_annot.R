@@ -397,7 +397,7 @@ predictors_annot <- function(se,
   #
   # - pos_UTR5: Relative positioning on 5'UTR.
 
-  Feature_matrix$pos_UTR5 <- relative_pos_map(row_gr,UTR5,0)
+  Feature_matrix$pos_UTR5 <- relative_pos_map(row_gr,UTR5,0,standardization)
 
   i  = Speak("relative positioning on 5'utr",i)
 
@@ -405,23 +405,24 @@ predictors_annot <- function(se,
   # - pos_UTR3: Relative positioning on 3'UTR.
   #
 
-  Feature_matrix$pos_UTR3 <- relative_pos_map(row_gr,UTR3,0)
+  Feature_matrix$pos_UTR3 <- relative_pos_map(row_gr,UTR3,0,standardization)
 
   i  = Speak("relative positioning on 3'utr",i)
 
   # - pos_cds: Relative positioning on Coding Sequence.
 
-  Feature_matrix$pos_cds <- relative_pos_map(row_gr,cds,0)
+  Feature_matrix$pos_cds <- relative_pos_map(row_gr,cds,0,standardization)
 
   i  = Speak("relative positioning on cds",i)
 
   #
   # - pos_Tx: Relative positioning on Transcript.
-  #
+
+
   # - pos_exons: Relative positioning on exons.
 
   exs_grl <- GenomicRanges::split(exs_txdb,1:length(exs_txdb))
-  Feature_matrix$pos_exons <- relative_pos_map(row_gr,exs_grl,0)
+  Feature_matrix$pos_exons <- relative_pos_map(row_gr,exs_grl,0,standardization)
   i  = Speak("relative positioning on exon",i)
 
   #
