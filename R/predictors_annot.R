@@ -125,6 +125,10 @@
 #' @param genes_ambiguity_method Can be "drop_overlap" or "average". The former will not annotate the modification sites overlapped with > 1 genes (By returning NA).
 #' The later will use the average feature entries for mapping of multiple genes.
 #'
+#' @param standardization A logical indicating whether to standardize the continous features; Default TRUE.
+#'
+#' P.S. the relative positions will not be standardized.
+#'
 #' @return This function will return a \code{\link{SummarizedExperiment}} object with a \code{mcols} of a feature or design matrix.
 #'
 #' @examples
@@ -203,7 +207,8 @@ predictors_annot <- function(se,
                                  motif = c("AAACA","GAACA","AGACA","GGACA","AAACT","GAACT","AGACT","GGACT","AAACC","GAACC","AGACC","GGACC"),
                                 hk_genes_list = NULL,
                              isoform_ambiguity_method = c("longest_tx","average"),
-                          genes_ambiguity_method = c("drop_overlap","average")
+                          genes_ambiguity_method = c("drop_overlap","average"),
+                       standardization = FALSE
 ) {
 
   #Pre_check
@@ -276,7 +281,10 @@ predictors_annot <- function(se,
   Intron <- intronsByTranscript(txdb)
 
   #Define a function for standardizing features
-  scale_i <- function(x){(x - mean(x))/sd(x)}
+  scale_i <- function(x,stand = T){
+    if(stand) return((x - mean(x))/sd(x))
+     else return(x)
+    }
 
   #Report Features
   i = 1
@@ -431,7 +439,7 @@ predictors_annot <- function(se,
                                   Splicing_junctions,
                                   end = "five",
                                   maximum_distance = 2000,
-                                  standardize = T)
+                                  standardize = standardization)
 
   i  = Speak("distance to the upstream (5' end) splicing junction",i)
 
@@ -439,7 +447,7 @@ predictors_annot <- function(se,
                                   Splicing_junctions,
                                   end = "three",
                                   maximum_distance = 2000,
-                                  standardize = T)
+                                  standardize = standardization)
 
   i  = Speak("distance to the downstream (3' end) splicing junction",i)
 
@@ -452,7 +460,7 @@ predictors_annot <- function(se,
                                                feature_gr = UTR3,
                                                feature_properties = sum(width(UTR3)),
                                                no_map_val = NA,
-                                               normalize = T)
+                                               normalize = standardization)
 
   Feature_matrix$length_UTR3[is.na(Feature_matrix$length_UTR3)] = 0
 
@@ -462,7 +470,7 @@ predictors_annot <- function(se,
                                                feature_gr = UTR5,
                                                feature_properties = sum(width(UTR5)),
                                                no_map_val = NA,
-                                               normalize = T)
+                                               normalize = standardization)
 
   Feature_matrix$length_UTR5[is.na(Feature_matrix$length_UTR5)] = 0
 
@@ -472,7 +480,7 @@ predictors_annot <- function(se,
                                               feature_gr = cds,
                                               feature_properties = sum(width(cds)),
                                               no_map_val = NA,
-                                              normalize = T)
+                                              normalize = standardization)
 
   Feature_matrix$length_cds[is.na(Feature_matrix$length_cds)] = 0
 
@@ -486,7 +494,7 @@ predictors_annot <- function(se,
                                                   feature_gr = exbg_txdb,
                                                   feature_properties = sum(width(exbg_txdb)),
                                                   no_map_val = NA,
-                                                  normalize = T)
+                                                  normalize = standardization)
 
   Feature_matrix$length_gene_ex[is.na(Feature_matrix$length_gene_ex)] = 0
 
@@ -501,7 +509,7 @@ predictors_annot <- function(se,
                                                      feature_gr = genes_txdb,
                                                      feature_properties = width(genes_txdb),
                                                      no_map_val = NA,
-                                                     normalize = T)
+                                                     normalize = standardization)
 
   Feature_matrix$length_gene_full[is.na(Feature_matrix$length_gene_full)] = 0
 
@@ -536,11 +544,11 @@ predictors_annot <- function(se,
   match_obj <- distanceToNearest(row_gr)
   dist_self[queryHits(match_obj)] <- mcols(match_obj)$distance
 
-  Feature_matrix$dist_nearest_p2000 <- as.numeric( scale_i( pmin(dist_self,2000) ))
+  Feature_matrix$dist_nearest_p2000 <- as.numeric( scale_i( pmin(dist_self,2000) , standardization))
 
   i  = Speak("clustering indicators --- distance to the nearest neigboors (peaked at 2000bp)",i)
 
-  Feature_matrix$dist_nearest_p200 <- as.numeric( scale_i( pmin(dist_self,200) ))
+  Feature_matrix$dist_nearest_p200 <- as.numeric( scale_i( pmin(dist_self,200) , standardization))
 
   i  = Speak("clustering indicators --- distance to the nearest neigboors (peaked at 200bp)",i)
 
@@ -556,7 +564,7 @@ predictors_annot <- function(se,
 
     Feature_matrix$PC_1bp[is.na(Feature_matrix$PC_1bp)] = mean(na.omit(Feature_matrix$PC_1bp))
 
-    Feature_matrix$PC_1bp = as.numeric( scale_i( Feature_matrix$PC_1bp ) )
+    Feature_matrix$PC_1bp = as.numeric( scale_i( Feature_matrix$PC_1bp , standardization) )
 
     i  = Speak("phast cons scores 1bp",i)
 
@@ -564,7 +572,7 @@ predictors_annot <- function(se,
 
     Feature_matrix$PC_101bp[is.na(Feature_matrix$PC_101bp)] = mean(na.omit(Feature_matrix$PC_101bp))
 
-    Feature_matrix$PC_101bp = as.numeric( scale_i( Feature_matrix$PC_101bp ) )
+    Feature_matrix$PC_101bp = as.numeric( scale_i( Feature_matrix$PC_101bp , standardization) )
 
     i  = Speak("phast cons scores 101bp",i)
   }
@@ -576,7 +584,7 @@ predictors_annot <- function(se,
 
     Feature_matrix$FC_1bp[is.na(Feature_matrix$FC_1bp)] = mean(na.omit(Feature_matrix$FC_1bp))
 
-    Feature_matrix$FC_1bp = as.numeric( scale_i( Feature_matrix$FC_1bp ) )
+    Feature_matrix$FC_1bp = as.numeric( scale_i( Feature_matrix$FC_1bp , standardization) )
 
     i  = Speak("fitness consequences scores 1bp z score",i)
 
@@ -584,7 +592,7 @@ predictors_annot <- function(se,
 
     Feature_matrix$FC_101bp[is.na(Feature_matrix$FC_101bp)] = mean(na.omit(Feature_matrix$FC_101bp))
 
-    Feature_matrix$FC_101bp =  as.numeric( scale_i( Feature_matrix$FC_101bp ) )
+    Feature_matrix$FC_101bp =  as.numeric( scale_i( Feature_matrix$FC_101bp , standardization) )
 
     i  = Speak("fitness consequences scores 101bp z score",i)
   }
@@ -638,7 +646,7 @@ predictors_annot <- function(se,
                                                feature_gr = txbygenes,
                                                feature_properties =  pmin( elementNROWS(txbygenes), 20),
                                                no_map_val = 0,
-                                               normalize = T)
+                                               normalize = standardization)
 
   i  = Speak("isoform number z score",i)
 
@@ -647,7 +655,7 @@ predictors_annot <- function(se,
                                                feature_gr = exbytx_txdb,
                                                feature_properties =  elementNROWS(exbytx_txdb),
                                                no_map_val = 0,
-                                               normalize = T)
+                                               normalize = standardization)
 
   i  = Speak("exon number z score",i)
 
@@ -673,7 +681,7 @@ predictors_annot <- function(se,
                                                  feature_gr = exbg_txdb,
                                                  feature_properties = Genes_GC_cont,
                                                  no_map_val = .5,
-                                                 normalize = T)
+                                                 normalize = standardization)
 
   i  = Speak("gene level GC content z score",i)
 

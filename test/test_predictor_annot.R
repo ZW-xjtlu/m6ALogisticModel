@@ -25,14 +25,15 @@ test_that("predictors annotation", {
 
   SE_CQN <- readRDS("SE_CQN_filtered.rds")
 
-  SE_features_added <- predictors_annot(se = SE_example,
+  SE_features_added <- predictors_annot(se = SE_CQN,
                                         txdb = TxDb.Hsapiens.UCSC.hg19.knownGene,
                                         bsgnm = Hsapiens,
                                         fc = fitCons.UCSC.hg19,
                                         pc = phastCons100way.UCSC.hg19,
                                         struct_hybridize = Struc_hg19,
                                         feature_lst = Additional_features_hg19,
-                                        hk_genes_list = HK_hg19_eids)
+                                        hk_genes_list = HK_hg19_eids,
+                                        standardization = FALSE)
 
   expect_that(SE_features_added, is_a("SummarizedExperiment"))
 })

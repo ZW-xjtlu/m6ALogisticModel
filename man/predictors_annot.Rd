@@ -9,7 +9,8 @@ predictors_annot(se, txdb, bsgnm, fc = NULL, pc = NULL,
   "AGACA", "GGACA", "AAACT", "GAACT", "AGACT", "GGACT", "AAACC", "GAACC",
   "AGACC", "GGACC"), hk_genes_list = NULL,
   isoform_ambiguity_method = c("longest_tx", "average"),
-  genes_ambiguity_method = c("drop_overlap", "average"))
+  genes_ambiguity_method = c("drop_overlap", "average"),
+  standardization = FALSE)
 }
 \arguments{
 \item{se}{A \code{\link{SummarizedExperiment}} object containing the \code{rowRanges} for modifications. \code{colData} and \code{assay} are not neccessarily specified for this function.}
@@ -43,6 +44,10 @@ The later will use the average feature entries for multiple mapping of the trans
 
 \item{genes_ambiguity_method}{Can be "drop_overlap" or "average". The former will not annotate the modification sites overlapped with > 1 genes (By returning NA).
 The later will use the average feature entries for mapping of multiple genes.}
+
+\item{standardization}{A logical indicating whether to standardize the continous features; Default TRUE.
+
+P.S. the relative positions will not be standardized.}
 }
 \value{
 This function will return a \code{\link{SummarizedExperiment}} object with a \code{mcols} of a feature or design matrix.
