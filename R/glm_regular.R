@@ -128,7 +128,7 @@ glm_regular <- function(Y,
                linetype = 2,
                size = .55) +
     coord_flip() + facet_grid(~ variable,scales = "free") +
-    theme_classic() +
+    theme_bw() +
     labs(title = paste0(family, " generalized linear model with genomic features" ),
          subtitle = HDER,
          x = "predictors",
