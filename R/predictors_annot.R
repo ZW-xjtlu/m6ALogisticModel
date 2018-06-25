@@ -208,7 +208,7 @@ predictors_annot <- function(se,
                                 hk_genes_list = NULL,
                              isoform_ambiguity_method = c("longest_tx","average"),
                           genes_ambiguity_method = c("drop_overlap","average"),
-                       standardization = FALSE
+                       standardization = TRUE
 ) {
 
   #Pre_check
