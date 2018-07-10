@@ -5,6 +5,7 @@
 #' @param exbtx a GRangesList object obtaied from the exonsByTranscripts function defined in package GenomicFeatures.
 #' @param txdb the corresponding txdb object.
 #' @return a data.frame indicating a given TXID is longest for the gene or not.
+#' @importFrom AnnotationDbi select
 #' @import GenomicFeatures
 #'
 find_longest_transcript <- function(exbtx,txdb){
