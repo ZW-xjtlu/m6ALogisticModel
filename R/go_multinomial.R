@@ -30,6 +30,7 @@ go_multinomial <- function(Y,
                            orgDb,
                            HDER = "GO_multinomial",
                            category = "BP",
+                           gene_key = "ENTREZID",
                            min_bg_count = 10,
                            min_gs_count = 10,
                            max_bg_count = 500,
@@ -52,17 +53,17 @@ if(!require(golite)){
 
 gene_by_tx <- transcriptsBy(txdb,by = "gene")
 
-genes_lst <- tapply(row_ranges,Y,function(x) names(subsetByOverlaps(gene_by_tx,x)) )
+genes_lst <- tapply(row_ranges, Y, function(x) names(subsetByOverlaps(gene_by_tx,x)) )
 
 if(!is.null(background_ranges)) {
 
-genes_bg <- names(subsetByOverlaps(gene_by_tx,background_ranges))
+genes_bg <- names( subsetByOverlaps(gene_by_tx, background_ranges) )
 
-stopifnot(all(unique(unlist(genes_lst)) %in% genes_bg))
+stopifnot(all( unique(unlist(genes_lst)) %in% genes_bg ))
 
 } else {
 
-genes_bg <-  unique(unlist(genes_lst))
+genes_bg <-  unique( unlist(genes_lst) )
 
 }
 
@@ -71,7 +72,7 @@ goea_lst <- goea(gene_set = genes_lst,
                  back_ground = genes_bg,
                  orgDb = orgDb,
                  category = category,
-                 gene_key = "ENTREZID",
+                 gene_key = gene_key,
                  min_bg_count = min_bg_count,
                  max_bg_count = max_bg_count,
                  min_gs_count = min_gs_count,
@@ -148,4 +149,5 @@ fig_height_p = 4 + .13 * length(unique_terms)
 
 ggsave(paste0(HDER,"_goea.pdf"),p,width = fig_width_p,height = fig_height_p)
 
+return(p)
 }
