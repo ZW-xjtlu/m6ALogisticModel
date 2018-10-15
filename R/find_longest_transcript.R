@@ -7,6 +7,7 @@
 #' @return a data.frame indicating a given TXID is longest for the gene or not.
 #' @importFrom AnnotationDbi select
 #' @import GenomicFeatures
+#' @export
 #'
 find_longest_transcript <- function(exbtx,txdb){
 
@@ -14,17 +15,19 @@ find_longest_transcript <- function(exbtx,txdb){
 
   Map_tx_gene <- suppressMessages( select(txdb,names(exbtx),columns = "GENEID",keytype = "TXID") )
 
+  tx_length <- tx_length[ Map_tx_gene$TXID ]
+
   nogene_indx <- is.na(Map_tx_gene$GENEID)
 
   tx_length <- tx_length[!nogene_indx]
 
   Map_tx_gene <- Map_tx_gene[!nogene_indx,]
 
-  Map_tx_gene <- Map_tx_gene[order(Map_tx_gene$GENEID),]
-
   longest_indx_lst <- tapply(tx_length, Map_tx_gene$GENEID, function(x) x == max(x))
 
   #test:# identical( gsub("\\..*","", names(unlist( longest_indx_lst ))), Map_tx_gene$GENEID)
+
+  Map_tx_gene <- Map_tx_gene[order(Map_tx_gene$GENEID),]
 
   Map_tx_gene$longest <- unlist( longest_indx_lst )
 

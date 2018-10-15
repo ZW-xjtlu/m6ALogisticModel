@@ -5,10 +5,10 @@
 \title{Run GO analysis over methylation sets with multi-class labeling.}
 \usage{
 go_multinomial(Y, row_ranges, txdb, orgDb, HDER = "GO_multinomial",
-  category = "BP", min_bg_count = 10, min_gs_count = 10,
-  max_bg_count = 500, max_gs_count = 500, pvalue_correction = "BH",
-  GO_Slim = FALSE, EASE_Score = TRUE, top_terms = 10,
-  save_chart = FALSE, background_ranges = NULL)
+  category = "BP", gene_key = "ENTREZID", min_bg_count = 10,
+  min_gs_count = 10, max_bg_count = 500, max_gs_count = 500,
+  pvalue_correction = "BH", GO_Slim = FALSE, EASE_Score = TRUE,
+  top_terms = 10, save_chart = FALSE, background_ranges = NULL)
 }
 \arguments{
 \item{Y}{A \code{vector} that defines the observed multinomial response variable.}
@@ -22,6 +22,8 @@ go_multinomial(Y, row_ranges, txdb, orgDb, HDER = "GO_multinomial",
 \item{HDER}{A \code{character} defining the subtitle and the file name of the plot.}
 
 \item{category}{A character specifying the gene ontology category, can be one of "BP", "CC", and "MF", default "BP".}
+
+\item{gene_key}{A character specifying the type of the gene ID, the available types of the keys can be find using \code{keytypes(org.Hs.eg.db)}, default "ENTREZID".}
 
 \item{min_bg_count}{Term minimum number of occurence in background genes; default 10.}
 
@@ -42,8 +44,6 @@ go_multinomial(Y, row_ranges, txdb, orgDb, HDER = "GO_multinomial",
 \item{save_chart}{Whether to save the chart of GO enrichment for each calss, default FALSE.}
 
 \item{background_ranges}{A \code{GRanges} object that defines the GO enrichment background, default is not used.}
-
-\item{gene_key}{A character specifying the type of the gene ID, the available types of the keys can be find using \code{keytypes(org.Hs.eg.db)}, default "ENTREZID".}
 }
 \description{
 \code{go_multinomial} is a function used to run GO analysis on multi-class labeled ranged data. The back ground used is the shared genes in all of the ranges.
