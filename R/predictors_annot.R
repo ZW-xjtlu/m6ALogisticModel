@@ -328,7 +328,7 @@ predictors_annot <- function(se,
 
   # - Annotate various exonic regions.
 
-  Feature_matrix$exon_stop <- row_gr%over%exbg_txdb
+  Feature_matrix$exon_stop <- row_gr%over%subsetByOverlaps( exbg_txdb, Stop_codons )
   i  = Speak("exon with stop codon",i)
 
   #Alternative exons: exons that could be introns in some transcripts
