@@ -257,9 +257,9 @@ predictors_annot <- function(se,
 
   cds <- cds[ names(cds) %in% txid ]
 
-  Stop_codons <- resize( unlist( range(cds) ) , 1, fix = "end" )
+  Stop_codons <- resize( unlist( range(cds) ) , 3, fix = "end" )
 
-  Start_codons <- resize( unlist( range(cds) ) , 1, fix = "start" )
+  Start_codons <- resize( unlist( range(cds) ) , 3, fix = "start" )
 
   TSS <- resize(unlist(range(exbytx_txdb)),1,fix = "start")
 
@@ -305,13 +305,13 @@ predictors_annot <- function(se,
 
   Feature_matrix$Stop_codons <- row_gr%over%(Stop_codons + 100)
 
-  i  = Speak("stop codons 201bp",i)
+  i  = Speak("stop codons 203bp",i)
 
   # - Start_codons: Start codon (201 bp center).
   #
 
   Feature_matrix$Start_codons <- row_gr%over%(Start_codons + 100)
-  i  = Speak("start codons 201bp",i)
+  i  = Speak("start codons 203bp",i)
 
   # - m6Am: 5'Cap m6Am (TSS that has underlying sequence of A).
   #
