@@ -7,7 +7,7 @@
 predictors_annot(se, txdb, bsgnm, fc = NULL, pc = NULL,
   struct_hybridize = NULL, feature_lst = NULL, motif = c("AAACA", "GAACA",
   "AGACA", "GGACA", "AAACT", "GAACT", "AGACT", "GGACT", "AAACC", "GAACC",
-  "AGACC", "GGACC"), hk_genes_list = NULL,
+  "AGACC", "GGACC"), motif_clustering = NULL, hk_genes_list = NULL,
   isoform_ambiguity_method = c("longest_tx", "average"),
   genes_ambiguity_method = c("drop_overlap", "average"),
   standardization = TRUE)
@@ -34,6 +34,8 @@ The precomputed MEA 2ndary structures could be find at the data attached in this
 \item{motif}{A character vector indicating the motifs centered by the modification nucleotite, the motif will not be attached if the \code{rowRanges} of \code{se} is not single nucleotide resolution (with all width = 1).
 
 By default, the motif selected is RRACH: c("AAACA","GAACA","AGACA","GGACA","AAACT","GAACT","AGACT","GGACT","AAACC","GAACC","AGACC","GGACC").}
+
+\item{motif_clustering}{Optional; A character vector indicating the motif used to generate the features for the clustering indexes, e.x. "DRACH".}
 
 \item{hk_genes_list}{Optional; A character string of the Gene IDs of the House Keeping genes. The Gene IDs should correspond to the Gene IDs used by the provided \code{TxDb} object.
 

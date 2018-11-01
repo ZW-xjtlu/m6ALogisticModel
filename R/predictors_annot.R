@@ -115,6 +115,8 @@
 #'
 #' By default, the motif selected is RRACH: c("AAACA","GAACA","AGACA","GGACA","AAACT","GAACT","AGACT","GGACT","AAACC","GAACC","AGACC","GGACC").
 #'
+#' @param motif_clustering Optional; A character vector indicating the motif used to generate the features for the clustering indexes, e.x. "DRACH".
+#'
 #' @param hk_genes_list Optional; A character string of the Gene IDs of the House Keeping genes. The Gene IDs should correspond to the Gene IDs used by the provided \code{TxDb} object.
 #'
 #' The entrez gene IDs of the house keeping genes of mm10 and hg19 are included in this package: \code{HK_hg19} and \code{HK_mm10}.
@@ -204,6 +206,7 @@ predictors_annot <- function(se,
                                  struct_hybridize = NULL,
                                  feature_lst = NULL,
                                  motif = c("AAACA","GAACA","AGACA","GGACA","AAACT","GAACT","AGACT","GGACT","AAACC","GAACC","AGACC","GGACC"),
+                                 motif_clustering = NULL,
                                 hk_genes_list = NULL,
                              isoform_ambiguity_method = c("longest_tx","average"),
                           genes_ambiguity_method = c("drop_overlap","average"),
@@ -540,8 +543,18 @@ predictors_annot <- function(se,
   # ## Clustering effect.
   #
 
+  Feature_matrix$clust_f1000 <- as.numeric( scale_i(countOverlaps( row_gr + 1000 , row_gr) - 1 , standardization) )
+
+  i  = Speak("clustering indicators --- number of neighboors within 1000bp flanking regions",i)
+
+  Feature_matrix$clust_f100 <- as.numeric( scale_i(countOverlaps( row_gr + 100 , row_gr) - 1 , standardization) )
+
+  i  = Speak("clustering indicators ---  number of neighboors within 100bp flanking regions",i)
+
   dist_self <- rep(2000,length(row_gr))
+
   match_obj <- distanceToNearest(row_gr)
+
   dist_self[queryHits(match_obj)] <- mcols(match_obj)$distance
 
   Feature_matrix$dist_nearest_p2000 <- as.numeric( scale_i( pmin(dist_self,2000) , standardization))
@@ -554,6 +567,53 @@ predictors_annot <- function(se,
 
   rm(match_obj)
   rm(dist_self)
+
+  if(!is.null(motif_clustering)) {
+
+    motif_transcripts <- sample_sequence( motif_clustering,
+                                          reduce( transcripts(txdb) ),
+                                          bsgnm )
+
+    Feature_matrix[[paste0("clust_", motif_clustering, "_f1000")]] <- as.numeric( scale_i(countOverlaps( row_gr+1000 , motif_transcripts) , standardization) )
+
+    i  = Speak(paste0("motif clustering --- number of ", motif_clustering, " motif neighboors within 1000bp flanking regions"),i)
+
+    Feature_matrix[[paste0("clust_", motif_clustering, "_f100")]] <- as.numeric( scale_i(countOverlaps( row_gr+100 , motif_transcripts) , standardization) )
+
+    i  = Speak(paste0("motif clustering ---  number of ", motif_clustering, " motif neighboors within 100bp flanking regions"),i)
+
+    motif_transcripts <- subsetByOverlaps( motif_transcripts, row_gr, invert = T) #Remove all the self motifs
+
+    match_obj <- distanceToNearest(row_gr, motif_transcripts)
+
+    dist_motif <- rep(2000,length(row_gr))
+
+    dist_motif[queryHits(match_obj)] <- mcols(match_obj)$distance
+
+    dist_self <- rep(2000,length(row_gr))
+
+    match_obj <- distanceToNearest(row_gr)
+
+    dist_self[queryHits(match_obj)] <- mcols(match_obj)$distance
+
+    less_index <- dist_self < dist_motif
+
+    dist_motif[less_index] <- dist_self[less_index]
+
+    Feature_matrix[[paste0("dist_",motif_clustering,"_p2000")]] <- as.numeric( scale_i( pmin(dist_motif,2000) , standardization))
+
+    i  = Speak(paste0("motif clustering --- distance to the nearest ",motif_clustering," motif (peaked at 2000bp)"),i)
+
+    Feature_matrix[[paste0("dist_",motif_clustering,"_p200")]] <- as.numeric( scale_i( pmin(dist_motif,200) , standardization))
+
+    i  = Speak(paste0("motif clustering --- distance to the nearest ",motif_clustering," motif (peaked at 200bp)"),i)
+
+    rm(match_obj)
+    rm(dist_self)
+    rm(dist_motif)
+    rm(less_index)
+    rm(motif_transcripts)
+  }
 
   #   ###5. Evolutionary fitness###
   #
@@ -689,16 +749,19 @@ predictors_annot <- function(se,
 
   Feature_matrix$GC_cont_101bp <- as.numeric( letterFrequency( DNAStringSet( Views(bsgnm,row_gr+50) ) , letters="CG", as.prob = T) )
 
-  Feature_matrix$GC_cont_101bp <- (Feature_matrix$GC_cont_101bp - mean(Feature_matrix$GC_cont_101bp))/sd(Feature_matrix$GC_cont_101bp)
+  if(standardization) Feature_matrix$GC_cont_101bp <- (Feature_matrix$GC_cont_101bp - mean(Feature_matrix$GC_cont_101bp))/sd(Feature_matrix$GC_cont_101bp)
 
   i  = Speak("101bp GC content z score",i)
 
+  if(standardization){
 
   # - GC_cont_101bp_abs: Absolute value of the GC content of 101bp local region of the sites.
 
   Feature_matrix$GC_cont_101bp_abs <- abs(Feature_matrix$GC_cont_101bp)
 
   i  = Speak("absolute value of the 101bp GC content z score",i)
+
+  }
 
   #Finally, mask the feature values that mapped to ambiguious genes as NA.
 

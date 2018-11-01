@@ -20,7 +20,7 @@ sequences <- as.character( DNAStringSet(bsgnm_view) )
 
 sequences_lst <- strsplit(sequences,"")
 
-chemical_properties <- function(NT = c("A","T","C","G")){
+chemical_properties <- function(NT = c("A","T","C","G","N")){
   nt <- match.arg(NT)
   feature_chem = c( nt %in% c("A","G"),
                     nt %in% c("A","C"),
