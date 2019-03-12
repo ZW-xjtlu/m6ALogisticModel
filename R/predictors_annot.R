@@ -115,7 +115,16 @@
 #'
 #' By default, the motif selected is RRACH: c("AAACA","GAACA","AGACA","GGACA","AAACT","GAACT","AGACT","GGACT","AAACC","GAACC","AGACC","GGACC").
 #'
-#' @param motif_clustering Optional; A character vector indicating the motif used to generate the features for the clustering indexes, e.x. "DRACH".
+#' @param motif_clustering A character vector indicating the motif used to generate the features for the clustering indexes, Default: "DRACH".
+#'
+#' @param self_clustering A logical indicating wheather to generate self clustering features. Default: False.
+#'
+#' If True, the self clustering features will be generated based on the \code{rowRanges} of the provided \code{SummarizedExperiment} object.
+#'
+#' Notice that the resulting self clustering features \code{clust_f100}, \code{clust_f1000}, \code{dist_nearest_p200}, and \code{dist_nearest_p2000}
+#' need to be treated very carefully in a machine learning prediction setting, because those features are highly mutable by other site observations.
+#'
+#' Additionally, it is not recommended to use motif clustering and self clustering simultaneously when performing an estimation task with multivariate regression, because the multicollinearity issue will usually be severe.
 #'
 #' @param hk_genes_list Optional; A character string of the Gene IDs of the House Keeping genes. The Gene IDs should correspond to the Gene IDs used by the provided \code{TxDb} object.
 #'
@@ -206,7 +215,8 @@ predictors_annot <- function(se,
                                  struct_hybridize = NULL,
                                  feature_lst = NULL,
                                  motif = c("AAACA","GAACA","AGACA","GGACA","AAACT","GAACT","AGACT","GGACT","AAACC","GAACC","AGACC","GGACC"),
-                                 motif_clustering = NULL,
+                                 motif_clustering = "DRACH",
+                                 self_clustering = FALSE,
                                 hk_genes_list = NULL,
                              isoform_ambiguity_method = c("longest_tx","average"),
                           genes_ambiguity_method = c("drop_overlap","average"),
@@ -542,6 +552,7 @@ predictors_annot <- function(se,
   #
   # ## Clustering effect.
   #
+  if(self_clustering) {
 
   Feature_matrix$clust_f1000 <- as.numeric( scale_i(countOverlaps( row_gr + 1000 , row_gr) - 1 , standardization) )
 
@@ -566,13 +577,26 @@ predictors_annot <- function(se,
   i  = Speak("clustering indicators --- distance to the nearest neigboors (peaked at 200bp)",i)
 
   rm(match_obj)
+
   rm(dist_self)
+
+  }
 
   if(!is.null(motif_clustering)) {
 
+    tx_reduced <- reduce(transcripts(txdb))
+
+    row_gr_expanded <- reduce(row_gr+2000)
+
+    motif_regions <- intersect(row_gr_expanded,tx_reduced)
+
+    rm(row_gr_expanded, tx_reduced)
+
     motif_transcripts <- sample_sequence( motif_clustering,
-                                          reduce( transcripts(txdb) ),
+                                          motif_regions,
                                           bsgnm )
+
+    rm(motif_regions)
 
     Feature_matrix[[paste0("clust_", motif_clustering, "_f1000")]] <- as.numeric( scale_i(countOverlaps( row_gr+1000 , motif_transcripts) , standardization) )
 
@@ -620,7 +644,7 @@ predictors_annot <- function(se,
   # - PC 1bp: standardized PC score 1 nt.
 
   if(!is.null(pc)) {
-    Feature_matrix$PC_1bp <- scores(pc,row_gr)$scores
+    Feature_matrix$PC_1bp <- score(pc,row_gr)
 
     Feature_matrix$PC_1bp[is.na(Feature_matrix$PC_1bp)] = mean(na.omit(Feature_matrix$PC_1bp))
 
@@ -628,7 +652,7 @@ predictors_annot <- function(se,
 
     i  = Speak("phast cons scores 1bp",i)
 
-    Feature_matrix$PC_101bp <- scores(pc,row_gr+50)$scores
+    Feature_matrix$PC_101bp <- score(pc,row_gr+50)
 
     Feature_matrix$PC_101bp[is.na(Feature_matrix$PC_101bp)] = mean(na.omit(Feature_matrix$PC_101bp))
 
@@ -640,7 +664,7 @@ predictors_annot <- function(se,
   #Feature 21. fitness consequences scores 1bp.
 
   if(!is.null(fc)) {
-    suppressWarnings(  Feature_matrix$FC_1bp <- scores(fc,row_gr)$scores )
+    suppressWarnings(  Feature_matrix$FC_1bp <- score(fc,row_gr) )
 
     Feature_matrix$FC_1bp[is.na(Feature_matrix$FC_1bp)] = mean(na.omit(Feature_matrix$FC_1bp))
 
@@ -648,7 +672,7 @@ predictors_annot <- function(se,
 
     i  = Speak("fitness consequences scores 1bp z score",i)
 
-    suppressWarnings(  Feature_matrix$FC_101bp <- scores(fc,row_gr+50)$scores )
+    suppressWarnings(  Feature_matrix$FC_101bp <- score(fc,row_gr+50) )
 
     Feature_matrix$FC_101bp[is.na(Feature_matrix$FC_101bp)] = mean(na.omit(Feature_matrix$FC_101bp))
 

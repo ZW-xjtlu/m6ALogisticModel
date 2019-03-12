@@ -7,9 +7,9 @@
 predictors_annot(se, txdb, bsgnm, fc = NULL, pc = NULL,
   struct_hybridize = NULL, feature_lst = NULL, motif = c("AAACA", "GAACA",
   "AGACA", "GGACA", "AAACT", "GAACT", "AGACT", "GGACT", "AAACC", "GAACC",
-  "AGACC", "GGACC"), motif_clustering = NULL, hk_genes_list = NULL,
-  isoform_ambiguity_method = c("longest_tx", "average"),
-  genes_ambiguity_method = c("drop_overlap", "average"),
+  "AGACC", "GGACC"), motif_clustering = "DRACH", self_clustering = FALSE,
+  hk_genes_list = NULL, isoform_ambiguity_method = c("longest_tx",
+  "average"), genes_ambiguity_method = c("drop_overlap", "average"),
   standardization = TRUE)
 }
 \arguments{
@@ -35,7 +35,16 @@ The precomputed MEA 2ndary structures could be find at the data attached in this
 
 By default, the motif selected is RRACH: c("AAACA","GAACA","AGACA","GGACA","AAACT","GAACT","AGACT","GGACT","AAACC","GAACC","AGACC","GGACC").}
 
-\item{motif_clustering}{Optional; A character vector indicating the motif used to generate the features for the clustering indexes, e.x. "DRACH".}
+\item{motif_clustering}{A character vector indicating the motif used to generate the features for the clustering indexes, Default: "DRACH".}
+
+\item{self_clustering}{A logical indicating wheather to generate self clustering features. Default: False.
+
+If True, the self clustering features will be generated based on the \code{rowRanges} of the provided \code{SummarizedExperiment} object.
+
+Notice that the resulting self clustering features \code{clust_f100}, \code{clust_f1000}, \code{dist_nearest_p200}, and \code{dist_nearest_p2000}
+need to be treated very carefully in a machine learning prediction setting, because those features are highly mutable by other site observations.
+
+Additionally, it is not recommended to use motif clustering and self clustering simultaneously when performing an estimation task with multivariate regression, because the multicollinearity issue will usually be severe.}
 
 \item{hk_genes_list}{Optional; A character string of the Gene IDs of the House Keeping genes. The Gene IDs should correspond to the Gene IDs used by the provided \code{TxDb} object.
 
