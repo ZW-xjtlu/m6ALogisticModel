@@ -5,9 +5,9 @@
 \title{Generate predictors/features for a range based RNA modification data.}
 \usage{
 predictors_annot_old(se, txdb, bsgnm, fc = NULL, pc = NULL,
-  struct_hybridize = NULL, feature_lst = NULL, motif = c("AAACA", "GAACA",
-  "AGACA", "GGACA", "AAACT", "GAACT", "AGACT", "GGACT", "AAACC", "GAACC",
-  "AGACC", "GGACC"), HK_genes_list = NULL)
+  struct_hybridize = NULL, feature_lst = NULL, motif = c("AAACA",
+  "GAACA", "AGACA", "GGACA", "AAACT", "GAACT", "AGACT", "GGACT", "AAACC",
+  "GAACC", "AGACC", "GGACC"), HK_genes_list = NULL)
 }
 \arguments{
 \item{se}{A \code{\link{SummarizedExperiment}} object containing the \code{rowRanges} for modifications. \code{colData} and \code{assay} are not neccessarily specified for this function.}

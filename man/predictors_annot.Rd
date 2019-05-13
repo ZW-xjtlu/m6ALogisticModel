@@ -5,11 +5,12 @@
 \title{Generate predictors/features for a range based RNA modification data.}
 \usage{
 predictors_annot(se, txdb, bsgnm, fc = NULL, pc = NULL,
-  struct_hybridize = NULL, feature_lst = NULL, motif = c("AAACA", "GAACA",
-  "AGACA", "GGACA", "AAACT", "GAACT", "AGACT", "GGACT", "AAACC", "GAACC",
-  "AGACC", "GGACC"), motif_clustering = "DRACH", self_clustering = FALSE,
-  hk_genes_list = NULL, isoform_ambiguity_method = c("longest_tx",
-  "average"), genes_ambiguity_method = c("drop_overlap", "average"),
+  struct_hybridize = NULL, feature_lst = NULL, motif = c("AAACA",
+  "GAACA", "AGACA", "GGACA", "AAACT", "GAACT", "AGACT", "GGACT", "AAACC",
+  "GAACC", "AGACC", "GGACC"), motif_clustering = "DRACH",
+  annot_clustering = NULL, hk_genes_list = NULL,
+  isoform_ambiguity_method = c("longest_tx", "average"),
+  genes_ambiguity_method = c("drop_overlap", "average"),
   standardization = TRUE)
 }
 \arguments{
@@ -37,18 +38,13 @@ By default, the motif selected is RRACH: c("AAACA","GAACA","AGACA","GGACA","AAAC
 
 \item{motif_clustering}{A character vector indicating the motif used to generate the features for the clustering indexes, Default: "DRACH".}
 
-\item{self_clustering}{A logical indicating wheather to generate self clustering features. Default: False.
+\item{annot_clustering}{A \code{\link{GRanges}} object to generate clustering features. Default: NULL.
 
-If True, the self clustering features will be generated based on the \code{rowRanges} of the provided \code{SummarizedExperiment} object.
-
-Notice that the resulting self clustering features \code{clust_f100}, \code{clust_f1000}, \code{dist_nearest_p200}, and \code{dist_nearest_p2000}
-need to be treated very carefully in a machine learning prediction setting, because those features are highly mutable by other site observations.
-
-Additionally, it is not recommended to use motif clustering and self clustering simultaneously when performing an estimation task with multivariate regression, because the multicollinearity issue will usually be severe.}
+The resulting clustering features will be named \code{clust_f100}, \code{clust_f1000}, \code{dist_nearest_p200}, and \code{dist_nearest_p2000}}
 
 \item{hk_genes_list}{Optional; A character string of the Gene IDs of the House Keeping genes. The Gene IDs should correspond to the Gene IDs used by the provided \code{TxDb} object.
 
-The entrez gene IDs of the house keeping genes of mm10 and hg19 are included in this package: \code{HK_hg19} and \code{HK_mm10}.}
+The entrez gene IDs of the house keeping genes of mm10 and hg19 are included in this package: \code{HK_hg19_eids} and \code{HK_mm10_eids}.}
 
 \item{isoform_ambiguity_method}{Can be "longest_tx" or "average". The former keeps only the longest transcript as the transcript annotation.
 The later will use the average feature entries for multiple mapping of the transcript isoform.}
@@ -176,41 +172,26 @@ TargetScan = TargetScan_hg19_gr,
 Verified_miRtargets = verified_targets_gr
 )
 
-SE_features_added <- predictors_annot_old(se = SE_example,
-                       txdb = TxDb.Hsapiens.UCSC.hg19.knownGene,
-                         bsgnm = Hsapiens,
-                           fc = fitCons.UCSC.hg19,
-                           pc = phastCons100way.UCSC.hg19,
-                         struct_hybridize = Struc_hg19,
-                       feature_lst = Feature_List_hg19,
-                     hk_genes_list = HK_hg19_eids)
+SE_features_added <- predictors_annot(se = SummarizedExperiment(rowRanges = hg19_miCLIP_gr),
+txdb = txdb,
+bsgnm = Hsapiens,
+fc = fitCons.UCSC.hg19,
+pc = phastCons100way.UCSC.hg19,
+struct_hybridize = Struc_hg19,
+feature_lst = Additional_features_hg19,
+hk_genes_list = HK_hg19_eids,
+motif = c("AAACA","AGACA","AAACT","AGACT","AAACC","AGACC",
+          "GAACA","GGACA","GAACT","GGACT","GAACC","GGACC",
+          "TAACA","TGACA","TAACT","TGACT","TAACC","TGACC"),
+motif_clustering = "DRACH",
+standardization = F,
+genes_ambiguity_method = "average")
+
 
 mcols(SE_features_added) ###Check the generated feature matrix.
 
-#ToDo1 : add argument Reduce_GenomicFeature_Colinearity.
-#ToDo2: add argument Reduce_GenomicResponse_Dependency.
-#ToDo3: the sample_names_coldata is very very confusing.
-#ToDo4: must support the input format of matrix and TRUE/FALSE for logistic regression.
-#ToDo5: Response could be ordinary, binomial, and poisson.
-
-#Fetures need to change into....
-1. change fc and pc into z scores.
-2. change last exon 50 bp into last exon relative position centered at 0.
-3. transcript that stop codon falls in the last exons.
-3. add last exon dummy.
-4. add relative exonic rank 0-1.
-5. add introns.
-6. add relative intronic positions.
-7. add relative intronic rank 0-1.
-8. add splicing junction 5' 50bp exons
-9. add splicing junction 3' 50bp exons
-10. add splicing junction 5' 50bp introns.
-11. add splicing junction 3' 50bp introns.
-12. add all relative positions in MAD standardized absolute bp 5' end, absolute bp 3' end.
-
-add another 30 features.
 
 }
 \seealso{
-\code{\link{logistic.modeling}} to perform model selection, statistics calculation, and visualization across multiple samples.
+\code{\link{glm_bas}}, \code{\link{glm_multinomial}}, \code{\link{glm_regular}} to perform model selection, statistics calculation, and visualization across multiple samples.
 }

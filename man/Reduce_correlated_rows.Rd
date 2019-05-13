@@ -5,7 +5,8 @@
 \title{Subset the rows/genomic features that are close on genomic coordinate to reduce the dependencies between rows.}
 \usage{
 reduce_correlated_rows(SE, cor_method = "spearman", cor_cut_off = 0.8,
-  bin_width = 101, reduction_method = "maxSum", information_matrix = NULL)
+  bin_width = 101, reduction_method = "maxSum",
+  information_matrix = NULL)
 }
 \arguments{
 \item{SE}{A \code{SummarizedExperiment} with rowRanges being the GRanges of row feaures, and an assay matrix with at least one collumn.}

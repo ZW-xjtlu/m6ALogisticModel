@@ -4,7 +4,8 @@
 \alias{relative_pos_map}
 \title{Calculate the relative position of a GRanges object on transcript.}
 \usage{
-relative_pos_map(query_gr, feature_grl, no_map_val = NA, standardize = TRUE)
+relative_pos_map(query_gr, feature_grl, no_map_val = NA,
+  standardize = TRUE)
 }
 \arguments{
 \item{query_gr}{The GRanges to query.}

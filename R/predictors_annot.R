@@ -117,18 +117,13 @@
 #'
 #' @param motif_clustering A character vector indicating the motif used to generate the features for the clustering indexes, Default: "DRACH".
 #'
-#' @param self_clustering A logical indicating wheather to generate self clustering features. Default: False.
+#' @param annot_clustering A \code{\link{GRanges}} object to generate clustering features. Default: NULL.
 #'
-#' If True, the self clustering features will be generated based on the \code{rowRanges} of the provided \code{SummarizedExperiment} object.
-#'
-#' Notice that the resulting self clustering features \code{clust_f100}, \code{clust_f1000}, \code{dist_nearest_p200}, and \code{dist_nearest_p2000}
-#' need to be treated very carefully in a machine learning prediction setting, because those features are highly mutable by other site observations.
-#'
-#' Additionally, it is not recommended to use motif clustering and self clustering simultaneously when performing an estimation task with multivariate regression, because the multicollinearity issue will usually be severe.
+#' The resulting clustering features will be named \code{clust_f100}, \code{clust_f1000}, \code{dist_nearest_p200}, and \code{dist_nearest_p2000}
 #'
 #' @param hk_genes_list Optional; A character string of the Gene IDs of the House Keeping genes. The Gene IDs should correspond to the Gene IDs used by the provided \code{TxDb} object.
 #'
-#' The entrez gene IDs of the house keeping genes of mm10 and hg19 are included in this package: \code{HK_hg19} and \code{HK_mm10}.
+#' The entrez gene IDs of the house keeping genes of mm10 and hg19 are included in this package: \code{HK_hg19_eids} and \code{HK_mm10_eids}.
 #'
 #' @param isoform_ambiguity_method Can be "longest_tx" or "average". The former keeps only the longest transcript as the transcript annotation.
 #' The later will use the average feature entries for multiple mapping of the transcript isoform.
@@ -162,48 +157,33 @@
 #' Verified_miRtargets = verified_targets_gr
 #' )
 #'
-#' SE_features_added <- predictors_annot_old(se = SE_example,
-#'                        txdb = TxDb.Hsapiens.UCSC.hg19.knownGene,
-#'                          bsgnm = Hsapiens,
-#'                            fc = fitCons.UCSC.hg19,
-#'                            pc = phastCons100way.UCSC.hg19,
-#'                          struct_hybridize = Struc_hg19,
-#'                        feature_lst = Feature_List_hg19,
-#'                      hk_genes_list = HK_hg19_eids)
+#' SE_features_added <- predictors_annot(se = SummarizedExperiment(rowRanges = hg19_miCLIP_gr),
+#' txdb = txdb,
+#' bsgnm = Hsapiens,
+#' fc = fitCons.UCSC.hg19,
+#' pc = phastCons100way.UCSC.hg19,
+#' struct_hybridize = Struc_hg19,
+#' feature_lst = Additional_features_hg19,
+#' hk_genes_list = HK_hg19_eids,
+#' motif = c("AAACA","AGACA","AAACT","AGACT","AAACC","AGACC",
+#'           "GAACA","GGACA","GAACT","GGACT","GAACC","GGACC",
+#'           "TAACA","TGACA","TAACT","TGACT","TAACC","TGACC"),
+#' motif_clustering = "DRACH",
+#' standardization = F,
+#' genes_ambiguity_method = "average")
+#'
 #'
 #' mcols(SE_features_added) ###Check the generated feature matrix.
 #'
-#' #ToDo1 : add argument Reduce_GenomicFeature_Colinearity.
-#' #ToDo2: add argument Reduce_GenomicResponse_Dependency.
-#' #ToDo3: the sample_names_coldata is very very confusing.
-#' #ToDo4: must support the input format of matrix and TRUE/FALSE for logistic regression.
-#' #ToDo5: Response could be ordinary, binomial, and poisson.
 #'
-#' #Fetures need to change into....
-#' 1. change fc and pc into z scores.
-# Standardize all relative position to be 0 centered (improve on interpretability).
-#' 2. change last exon 50 bp into last exon relative position centered at 0.
-#' 3. transcript that stop codon falls in the last exons.
-#' 3. add last exon dummy.
-#' 4. add relative exonic rank 0-1.
-#' 5. add introns.
-#' 6. add relative intronic positions.
-#' 7. add relative intronic rank 0-1.
-#' 8. add splicing junction 5' 50bp exons
-#' 9. add splicing junction 3' 50bp exons
-#' 10. add splicing junction 5' 50bp introns.
-#' 11. add splicing junction 3' 50bp introns.
-#' 12. add all relative positions in MAD standardized absolute bp 5' end, absolute bp 3' end.
-#'
-#' add another 30 features.
-#'
-#' @seealso \code{\link{logistic.modeling}} to perform model selection, statistics calculation, and visualization across multiple samples.
+#' @seealso \code{\link{glm_bas}}, \code{\link{glm_multinomial}}, \code{\link{glm_regular}} to perform model selection, statistics calculation, and visualization across multiple samples.
 #'
 #' @import BSgenome
 #' @import Biostrings
 #' @import GenomicFeatures
 #' @import GenomicRanges
 #' @import SummarizedExperiment
+#' @importFrom GenomicScores score
 #' @export
 
 
@@ -216,7 +196,7 @@ predictors_annot <- function(se,
                                  feature_lst = NULL,
                                  motif = c("AAACA","GAACA","AGACA","GGACA","AAACT","GAACT","AGACT","GGACT","AAACC","GAACC","AGACC","GGACC"),
                                  motif_clustering = "DRACH",
-                                 self_clustering = FALSE,
+                                 annot_clustering = NULL,
                                 hk_genes_list = NULL,
                              isoform_ambiguity_method = c("longest_tx","average"),
                           genes_ambiguity_method = c("drop_overlap","average"),
@@ -224,9 +204,11 @@ predictors_annot <- function(se,
 ) {
 
   #Pre_check
+  stopifnot(nrow(se)!=0)
   isoform_ambiguity_method <- match.arg(isoform_ambiguity_method)
   genes_ambiguity_method <- match.arg(genes_ambiguity_method)
   row_gr = rowRanges(se)
+  stopifnot(length(row_gr)!=0)
 
   #Extract genomic features.
 
@@ -477,7 +459,7 @@ predictors_annot <- function(se,
 
   Feature_matrix$length_UTR3[is.na(Feature_matrix$length_UTR3)] = 0
 
-  i  = Speak("3'UTR length (z-score)",i)
+  i  = Speak("3'UTR length ",i)
 
   Feature_matrix$length_UTR5 <- properties_map(query_gr = row_gr,
                                                feature_gr = UTR5,
@@ -487,7 +469,7 @@ predictors_annot <- function(se,
 
   Feature_matrix$length_UTR5[is.na(Feature_matrix$length_UTR5)] = 0
 
-  i  = Speak("5'UTR length (z-score)",i)
+  i  = Speak("5'UTR length ",i)
 
   Feature_matrix$length_cds <- properties_map(query_gr = row_gr,
                                               feature_gr = cds,
@@ -497,21 +479,23 @@ predictors_annot <- function(se,
 
   Feature_matrix$length_cds[is.na(Feature_matrix$length_cds)] = 0
 
-  i  = Speak("cds length (z-score)",i)
+  i  = Speak("cds length ",i)
 
 
   # - Gene_length_ex: standardized gene length of exonic regions (z score).
   #
 
+  txbg_txdb <- transcriptsBy(txdb, by = "gene")
+
   Feature_matrix$length_gene_ex <- properties_map(query_gr = row_gr,
-                                                  feature_gr = exbg_txdb,
-                                                  feature_properties = sum(width(exbg_txdb)),
+                                                  feature_gr = txbg_txdb,
+                                                  feature_properties = sum(width(reduce(exbg_txdb))),
                                                   no_map_val = NA,
                                                   normalize = standardization)
 
   Feature_matrix$length_gene_ex[is.na(Feature_matrix$length_gene_ex)] = 0
 
-  i  = Speak("gene length-exons (z-score)",i)
+  i  = Speak("gene length-exons" ,i)
 
   #
   # - Gene_length_all: standardized gene length of all regions (z score).
@@ -519,14 +503,50 @@ predictors_annot <- function(se,
   #
 
   Feature_matrix$length_gene_full <-  properties_map(query_gr = row_gr,
-                                                     feature_gr = genes_txdb,
-                                                     feature_properties = width(genes_txdb),
+                                                     feature_gr = txbg_txdb,
+                                                     feature_properties = sum(width(reduce(txbg_txdb))),
                                                      no_map_val = NA,
                                                      normalize = standardization)
 
   Feature_matrix$length_gene_full[is.na(Feature_matrix$length_gene_full)] = 0
 
-  i  = Speak("gene length full transcript (z-score)",i)
+  rm(txbg_txdb)
+
+  i  = Speak("gene length full transcript",i)
+
+  #
+  # - length_tx_exon: the length of the transcripts exons
+  #
+  #
+
+  tx <- transcripts(txdb)
+
+  Feature_matrix$length_tx_exon <-  properties_map(query_gr = row_gr,
+                                                     feature_gr = tx,
+                                                     feature_properties = sum(width(exbytx_txdb)),
+                                                     no_map_val = NA,
+                                                     normalize = standardization)
+
+  Feature_matrix$length_tx_exon[is.na(Feature_matrix$length_tx_exon)] = 0
+
+  i  = Speak("transcript exonic length",i)
+
+  #
+  # - length_tx_full: the length of the transcripts
+  #
+  #
+
+  Feature_matrix$length_tx_full <-  properties_map(query_gr = row_gr,
+                                                   feature_gr = tx,
+                                                   feature_properties = width(tx),
+                                                   no_map_val = NA,
+                                                   normalize = standardization)
+
+  Feature_matrix$length_tx_full[is.na(Feature_matrix$length_tx_full)] = 0
+
+  i  = Speak("transcript full length",i)
+
+  rm(tx)
 
   #  #####=============== The following features that are optional ===============#####
   #
@@ -552,23 +572,27 @@ predictors_annot <- function(se,
   #
   # ## Clustering effect.
   #
-  if(self_clustering) {
+  if(!is.null(annot_clustering)) {
 
-  Feature_matrix$clust_f1000 <- as.numeric( scale_i(countOverlaps( row_gr + 1000 , row_gr) - 1 , standardization) )
+  self_count <- countOverlaps( row_gr , annot_clustering)
+
+  Feature_matrix$clust_f1000 <- as.numeric( scale_i(countOverlaps( row_gr + 1000 , annot_clustering) - self_count , standardization) )
 
   i  = Speak("clustering indicators --- number of neighboors within 1000bp flanking regions",i)
 
-  Feature_matrix$clust_f100 <- as.numeric( scale_i(countOverlaps( row_gr + 100 , row_gr) - 1 , standardization) )
+  Feature_matrix$clust_f100 <- as.numeric( scale_i(countOverlaps( row_gr + 100 , annot_clustering) - self_count , standardization) )
 
   i  = Speak("clustering indicators ---  number of neighboors within 100bp flanking regions",i)
 
-  dist_self <- rep(2000,length(row_gr))
+  rm(self_count)
 
-  match_obj <- distanceToNearest(row_gr)
+  dist_self <- rep(2000, length(row_gr))
+
+  match_obj <- distanceToNearest(row_gr, annot_clustering)
 
   dist_self[queryHits(match_obj)] <- mcols(match_obj)$distance
 
-  Feature_matrix$dist_nearest_p2000 <- as.numeric( scale_i( pmin(dist_self,2000) , standardization))
+  Feature_matrix$dist_nearest_p2000 <- as.numeric( scale_i( pmin(dist_self, 2000) , standardization))
 
   i  = Speak("clustering indicators --- distance to the nearest neigboors (peaked at 2000bp)",i)
 
@@ -717,10 +741,18 @@ predictors_annot <- function(se,
   Feature_matrix$sncRNA  <- row_gr%over%exbytx_nc[!lnc_idx]
   i  = Speak("snc RNA (<= 200bp)",i)
 
-  # - lncRNA: long noncoding RNA (> 200bp)
+  # - lncRNA: long noncoding RNAs (> 200bp)
   #
   Feature_matrix$lncRNA  <- row_gr%over%exbytx_nc[lnc_idx]
   i  = Speak("lnc RNA (> 200bp)",i)
+
+  # -lincRNA: Long intervening/intergenic noncoding RNAs.
+
+  Feature_matrix$lncRNA  <- row_gr%over%subsetByOverlaps(exbytx_nc[lnc_idx],
+                                                         subsetByOverlaps( genes_txdb, cds ),
+                                                         invert = TRUE)
+
+  i  = Speak("linc RNA (> 200bp) lncRNA which do not overlap protein-coding genes",i)
 
   # - Isoform_num: Transcript isoform numbers standardized by z score.
   #

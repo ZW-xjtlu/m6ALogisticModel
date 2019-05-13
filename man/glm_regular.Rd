@@ -4,9 +4,9 @@
 \alias{glm_regular}
 \title{Build and visualize a generalized linear model.}
 \usage{
-glm_regular(Y, PREDICTORS, HDER = "glm", family = c("gaussian", "binomial",
-  "poisson"), CUT_OFF = 5, Critical_value = 0.05, Exclude_intercept = F,
-  Sort_by = c("byZstat", "byLogit"))
+glm_regular(Y, PREDICTORS, HDER = "glm", family = c("gaussian",
+  "binomial", "poisson"), CUT_OFF = 5, Critical_value = 0.05,
+  Exclude_intercept = F, Sort_by = c("byZstat", "byLogit"))
 }
 \arguments{
 \item{Y}{A \code{vector} that defines the response variable. It can be a 2-column integer matrix given the binomial family：the first column gives the number of successes and the second the number of failures.}

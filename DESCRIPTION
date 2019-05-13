@@ -10,5 +10,5 @@ Imports: readr, BSgenome, Biostrings, GenomicFeatures, GenomicRanges, Summarized
 Depends: SummarizedExperiment
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 URL: http://github.com/ZhenWei10/m6ALogisticModel
