@@ -592,15 +592,32 @@ predictors_annot <- function(se,
 
   dist_self[queryHits(match_obj)] <- mcols(match_obj)$distance
 
-  Feature_matrix$dist_nearest_p2000 <- as.numeric( scale_i( pmin(dist_self, 2000) , standardization))
-
-  i  = Speak("clustering indicators --- distance to the nearest neigboors (peaked at 2000bp)",i)
-
-  Feature_matrix$dist_nearest_p200 <- as.numeric( scale_i( pmin(dist_self,200) , standardization))
-
-  i  = Speak("clustering indicators --- distance to the nearest neigboors (peaked at 200bp)",i)
-
   rm(match_obj)
+
+  #For row_gr that is overlapping with annot_clustering
+  if(any(row_gr %over% annot_clustering)){
+
+  match_obj <- distanceToNearest(annot_clustering)
+
+  fol <- findOverlaps(row_gr, annot_clustering)
+
+  dist_tmp <- rep(2000, queryLength(fol))
+
+  dist_tmp <- mcols(match_obj)$distance[match(subjectHits(fol),queryHits(match_obj))]
+
+  dist_self[queryHits(fol)] <- dist_tmp
+
+  rm(fol, match_obj, dist_tmp)
+
+  }
+
+  Feature_matrix$dist_nearest_p2000 <- as.numeric( scale_i( pmin(dist_self, 2000) , standardization) )
+
+  i  = Speak("clustering indicators --- distance to the nearest neigboors (peaked at 2000bp)", i)
+
+  Feature_matrix$dist_nearest_p200 <- as.numeric( scale_i( pmin(dist_self,200) , standardization) )
+
+  i  = Speak("clustering indicators --- distance to the nearest neigboors (peaked at 200bp)", i)
 
   rm(dist_self)
 

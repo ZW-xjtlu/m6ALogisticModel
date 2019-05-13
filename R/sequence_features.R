@@ -1,4 +1,3 @@
-
 #' @title Generate the sequence feature matrix from GRanges.
 #'
 #' @description \code{sequence_features} is used to extract the sequence features given GenomicRanges object.
@@ -12,42 +11,40 @@
 #'
 sequence_features <- function(query_gr, bsgnm) {
 
-stopifnot(all(width(query_gr) == width(query_gr)[1]))
+  stopifnot(all(width(query_gr) == width(query_gr)[1]))
 
-bsgnm_view <- Views(bsgnm,query_gr)
+  N = width(query_gr)[1]
 
-sequences <- as.character( DNAStringSet(bsgnm_view) )
+  bsgnm_view <- Views(bsgnm,query_gr)
 
-sequences_lst <- strsplit(sequences,"")
+  sequences <- as.character( DNAStringSet(bsgnm_view) )
 
-chemical_properties <- function(NT = c("A","T","C","G","N")){
-  nt <- match.arg(NT)
-  feature_chem = c( nt %in% c("A","G"),
-                    nt %in% c("A","C"),
-                    nt %in% c("A","T"))
-  return(feature_chem)
-}
+  rm(bsgnm_view)
 
-nt_frequency <- function(NT_vec) {
-  D <- vector("numeric",length(NT_vec))
-  for(i in seq_along(NT_vec)) {
-    D[i] <- mean(NT_vec[1:i] == NT_vec[i])
-  }
-  return(D)
-}
+  sequences_M <- matrix( unlist( strsplit(sequences,"") ) , ncol =  N, byrow = T)
 
-features_lst <- lapply(sequences_lst, function(x){
-  M_features <- rbind( sapply(x,chemical_properties), nt_frequency(x) )
-  return(as.vector(M_features))
-})
+  rm(sequences)
+  #vectorized solution
+  purine_M <- sequences_M == "A" | sequences_M == "G"
+  colnames(purine_M) <-  paste0("purine_",seq_len(N))
+  amino_M <- sequences_M == "A" | sequences_M == "C"
+  colnames(amino_M) <-  paste0("amino_",seq_len(N))
+  weakHyb_M <- sequences_M == "A" | sequences_M == "T"
+  colnames(weakHyb_M) <- paste0("weakHyb_",seq_len(N))
 
-nt_num <- width(query_gr)[1]
+  cumFreq_A <- rowCumsums(matrix(as.numeric( sequences_M == "A" ), ncol = N, byrow = F))
+  cumFreq_T <- rowCumsums(matrix(as.numeric( sequences_M == "T" ), ncol = N, byrow = F))
+  cumFreq_C <- rowCumsums(matrix(as.numeric( sequences_M == "C" ), ncol = N, byrow = F))
+  cumFreq_G <- rowCumsums(matrix(as.numeric( sequences_M == "G" ), ncol = N, byrow = F))
 
-feature_M <- matrix(unlist(features_lst),ncol = nt_num*4,byrow = T)
+  cumFreq_combined <- matrix(0,ncol = N, nrow = length(query_gr))
+  cumFreq_combined[sequences_M == "A"] <- cumFreq_A[sequences_M == "A"]
+  cumFreq_combined[sequences_M == "T"] <- cumFreq_T[sequences_M == "T"]
+  cumFreq_combined[sequences_M == "C"] <- cumFreq_C[sequences_M == "C"]
+  cumFreq_combined[sequences_M == "G"] <- cumFreq_G[sequences_M == "G"]
 
-feature_M <- as.data.frame(feature_M)
+  cumFreq_combined <- t(t(cumFreq_combined) / seq_len(N))
+  colnames(cumFreq_combined ) <-  paste0("cumFreq_",seq_len(N))
 
-colnames( feature_M ) <- paste0(rep(c("purine","amino","weakHyb","cumFreq")),"_",rep( 1:nt_num , each = 4))
-
-return(as.data.frame(feature_M))
+  return(as.data.frame(cbind(purine_M,amino_M,weakHyb_M,cumFreq_combined)))
 }
